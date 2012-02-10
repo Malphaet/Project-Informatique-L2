@@ -1,21 +1,19 @@
 CC = gcc
 CFLAGS = -W -Wall -ansi -pedantic
 LDFLAGS = 
-SRC = $(wildcart *.c)
-OBJ = $(SRC:.c=.o)
-EXEC=test_show_table test_vector_operations test_matrix
+EXEC=sudoku
 
 all: $(EXEC)
 
-$(EXEC): $(OBJ)
+$(EXEC): sudoku.o tools.o
 	$(CC) $(LDFLAGS) -o $@ $^
 
-%.o: %.c
+%.o: %.c %.h structures.h constants.h
 	$(CC) $(CFLAGS) -o $@ -c $< -lm
 
 clean: 
-	rm *.o
+	rm -f *.o
 	
-mrproprer: clean
-	rm $(EXEC)
+cleaner: clean
+	rm -f $(EXEC)
 

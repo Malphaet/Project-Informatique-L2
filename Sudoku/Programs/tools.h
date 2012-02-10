@@ -1,15 +1,22 @@
 /*----------------------------------*/
 /*		Sudoku Scholar Project		*/
+/*----------------------------------*/
 /*		Copyleft Maximilien Rigaut	*/
-/*		Charly Celereau				*/
+/*				 Charly Celereau	*/
+/*----------------------------------*/
+/*		Date : 	 	10/02/12		*/
 /*----------------------------------*/
 
-#ifndef __MODEL__
-#define __MODEL__
+#ifndef _TOOLS_
+#define _TOOLS_
+
 /************* Includes *************/
+#include "constants.h"
+#include "structures.h"
 
 /************** Defines *************/
-/************** Typedef *************/
-/************* Prototype ************/
+
+
+
 
 #endif
