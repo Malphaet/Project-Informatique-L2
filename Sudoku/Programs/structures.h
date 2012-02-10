@@ -7,32 +7,42 @@
 /*		Date : 	 	10/02/12		*/
 /*----------------------------------*/
 
-#ifndef _STRUCTURES_
-#define _STRUCTURES_
+#ifndef __STRUCTURES__
+#define __STRUCTURES__
 
 /************* Includes *************/
 #include "constants.h"
 
 /************** Typedef *************/
 
-typedef int GRILLE[DIM][DIM];
-
+/* Case */
 typedef struct CASE
 {
-	int candidats[DIM];
-	int nb_candidats;
-	int value;
+	int candidats[DIM]; /* Nombres candidats pour la resolution de la case */
+	int nb_candidats; /* Nombre de candidats potentiels */
+	int value; /* Valeur de la case : 0 si non resolue; la valeur adaptee sinon */
 	/* Position de la case dans la grille (ligne, colone) */
 	int row;
 	int col;
 } CASE;
 
+/* Pile de cases */
+typedef struct
+{
+	CASE* cases[DIM*DIM]; /* Au plus, on aura DIM*DIM cases dans la pile */
+	int nb_cases; /* Nombre d'elements dans de la pile */
+} PILE_CASE;
+
+/* Grille de Sudoku */
+typedef CASE GRILLE[DIM][DIM];
 /************* Prototype ************/
+
 void init_grille(GRILLE);
 void affiche_grille(GRILLE);
-void saisie_grille(GRILLE, char *adr);
-void init_case(CASE *c, int, int);
-void affiche_case(CASE c);
-void remplit_case(CASE *c, int);
+void saisie_grille(GRILLE, char *);
+void init_case(CASE *, int, int);
+void affiche_case(CASE);
+void remplit_case(CASE *, int);
+void init_pile_cases(GRILLE, PILE_CASE *);
 
 #endif

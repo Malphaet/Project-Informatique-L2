@@ -7,8 +7,8 @@
 /*		Date : 	 	10/02/12		*/
 /*----------------------------------*/
 
-#ifndef _TOOLS_
-#define _TOOLS_
+#ifndef __TOOLS__
+#define __TOOLS__
 
 /************* Includes *************/
 #include "constants.h"

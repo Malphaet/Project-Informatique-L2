@@ -11,7 +11,11 @@
 #define DIM_LINE 21
 
 #define GRID_FILE "./grille.txt"
+#if DIM<10
 #define GBSIZE (2*DIM+3*(DIM/3)+1)
+#else
+#define GBSIZE (3*DIM+3*(DIM/3)+1)
+#endif
 /* ========= Typedef ==========*/
 typedef struct CASE{
 	int chiffres[DIM];
