@@ -37,13 +37,13 @@ void init_grille(GRILLE Grille)
 
 void init_pile_case(GRILLE g, PILE_CASE *pile)
 {
-	/* Parcours de la grille */
+/* Parcours de la grille */
 	int i, j;
 	for(i = 0; i != DIM; i++)
 		for(j = 0; j != DIM; j++)
 		/* Si la case est remplie : la mettre dans la pile */
 			if(g[i][j].value != 0)
-				pile->cases[i] = &g[i][j];
+				pile->cases[pile->nb_cases++] = &g[i][j];
 }
 
 /* Initialisation d'une case, tous les chiffres sont candidats */
@@ -101,12 +101,24 @@ void affiche_case(CASE c)
 			printf("%d ",i+1);
 	printf("\nCase remplie : %s",c.value==0?"NON":"OUI");
 	printf("\n");
-	printf("Cordonnees : Ligne %d, Colonne %d\n", c.row, c.col);
+	printf("Cordonnees : Ligne %d, Colonne %d", c.row, c.col);
 }
 
 /* ================================================== */
 /* ==============      Gestion I/O       ============ */
 /* ================================================== */
+/* Affiche une variable de type GRILLE */
+void affiche_grille(GRILLE grille){
+	int i,j;
+	printf("\n"); for (j=0;j<GBSIZE;j++) printf("-"); printf("\n");
+	for (i=0;i<DIM;i++){ 
+		printf("| ");
+		for (j=0;j<DIM; j++){ printf("%d ",grille[i][j].value); if ((j+1)%3==0) printf("| "); }
+		if ((i+1)%3==0) { printf("\n"); for (j=0;j<GBSIZE;j++) printf("-"); }
+		printf("\n");
+	}
+	printf("\n");
+}
 
 /* Saisie d'une grille a partir d'un fichier */
 /* Les "chiffres" peuvent etre > 9 mais doivent etre separes par un (ou plusieurs) espace */
