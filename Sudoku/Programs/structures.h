@@ -37,12 +37,11 @@ typedef struct
 typedef CASE GRILLE[DIM][DIM];
 /************* Prototype ************/
 
-void init_grille(GRILLE);
-void affiche_grille(GRILLE);
-void saisie_grille(GRILLE, char *);
-void init_case(CASE *, int, int);
-void affiche_case(CASE);
-void remplit_case(CASE *, int);
-void init_pile_cases(GRILLE, PILE_CASE *);
-
+void init_grille(GRILLE); 					/* Tested */
+void affiche_grille(GRILLE);				/* Tested */
+void saisie_grille(GRILLE, char *);			/* Seems working */
+void init_case(CASE *, int, int);			/* Tested */
+void affiche_case(CASE);					/* Tested */
+void remplit_case(CASE *, int);				/* Seems Working */
+void init_pile_cases(GRILLE, PILE_CASE *);	/* In-test */
 #endif

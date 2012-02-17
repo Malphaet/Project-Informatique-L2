@@ -22,6 +22,7 @@ int main(void){
 	init_grille(grille);
 	saisie_grille(grille,path);
 	affiche_grille(grille);
+	affiche_case(grille[1][1]);
 	return 0;
 }
 

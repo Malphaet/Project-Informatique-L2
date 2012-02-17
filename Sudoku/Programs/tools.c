@@ -36,12 +36,15 @@ void init_grille(GRILLE Grille)
 /* Les "chiffres" peuvent etre > 9 mais doivent etre separes par un (ou plusieurs) espace */
 void saisie_grille(GRILLE g, char *adr)
 {
-	int i,j;
+	int i,j,val;
 	FILE *f;
 	f=fopen(adr,"r");
 	for (i=0;i<DIM;i++){
 		for (j=0;j< DIM;j++)
-			fscanf(f,"%d",&g[i][j].value);
+			{
+				fscanf(f,"%d",&val);
+				remplit_case(&g[i][j],val);
+			}
 	}
 	fclose(f);
 }
@@ -84,7 +87,7 @@ void affiche_case(CASE c)
 			printf("%d ",i+1);
 	printf("\nCase remplie : %s",c.value==0?"NON":"OUI");
 	printf("\n");
-	printf("Cordonnees : Ligne %d, Colonne %d", c.row, c.col);
+	printf("Cordonnees : Ligne %d, Colonne %d\n", c.row, c.col);
 }
 
 /* Affiche une variable de type GRILLE */
