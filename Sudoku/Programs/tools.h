@@ -1,10 +1,10 @@
 /*----------------------------------*/
-/*		Sudoku Scholar Project		*/
+/*  Sudoku Scholar Project          */
 /*----------------------------------*/
-/*		Copyleft Maximilien Rigaut	*/
-/*				 Charly Celereau	*/
+/*  Copyleft Maximilien Rigaut      */
+/*           Charly Celereau        */
 /*----------------------------------*/
-/*		Date : 	 	10/02/12		*/
+/*  Date : 10/02/12                 */
 /*----------------------------------*/
 
 #ifndef __TOOLS__

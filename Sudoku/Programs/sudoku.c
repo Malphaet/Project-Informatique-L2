@@ -1,10 +1,10 @@
 /*----------------------------------*/
-/*		Sudoku Scholar Project		*/
+/*  Sudoku Scholar Project          */
 /*----------------------------------*/
-/*		Copyleft Maximilien Rigaut	*/
-/*				 Charly Celereau	*/
+/*  Copyleft Maximilien Rigaut      */
+/*           Charly Celereau        */
 /*----------------------------------*/
-/*		Date : 	 	10/02/12		*/
+/*  Date : 10/02/12                 */
 /*----------------------------------*/
 
 /************* Includes *************/
@@ -18,7 +18,7 @@
 
 int main(void)
 {
-	char path[]="../Data/grilles_test.txt";
+	char path[]="../Data/grille2.txt";
 	GRILLE grille;
 	PILE_CASE Pile;
 	init_grille(grille);
@@ -37,7 +37,5 @@ void affiche_pile(PILE_CASE *Pile)
 	int i;
 	CASE **pile_ptr = Pile->cases;
 	for(i = 0; i < Pile->nb_cases; i++)
-	{
 			affiche_case(*pile_ptr[i]);
-	}
 }
