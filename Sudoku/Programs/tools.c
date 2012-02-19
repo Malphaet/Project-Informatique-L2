@@ -75,7 +75,8 @@ void remplit_case(CASE *c, int chiffre)
 }
 
 int supprime_candidat(CASE *c,int candidat){
-	if (c->value || c->nb_candidats<2 || !c->candidats[candidat-1]) return 0;
+	if (c->value || c->nb_candidats<2) return 0;
+	if (!c->candidats[candidat-1]) return 1; /* Pas certain de l'implementation pour l'instant */
 	c->candidats[candidat-1]=0;
 	c->nb_candidats--;
 	return 1;
@@ -106,7 +107,21 @@ int contrainte_unicite_colone_case(GRILLE g, PILE_CASE *p, CASE *c){
 }
 
 int contrainte_unicite_case(GRILLE g, PILE_CASE *p, CASE *c){
+	int x,y, i,j, r=1;
+	x=c->col/DIM_Region;
+	y=c->row/DIM_Region;
 
+	for (i=0; i<DIM_Region; i++)
+		for (j=0; j<DIM_Region; j++)
+			if ((x+i) != c->row || (y+j) != c->col){ /* Inutile d'essayer de se supprimer */
+				if (supprime_candidat(&g[x+i][y+j],c->value))
+					p->cases[++p->nb_cases] = c;
+				else
+					r=0; /* /!\ Un arret immediat me parait plus judicieux */
+			}
+	r=contrainte_unicite_colone_case(g,p,c) && r;
+	r=contrainte_unicite_ligne_case(g,p,c) && r;
+	return r;
 }
 /* ================================================== */
 /* ==============       Affichage        ============ */
@@ -119,7 +134,7 @@ void affiche_grille(GRILLE grille){
 	for (i=0;i<DIM;i++){ 
 		printf("| ");
 		for (j=0;j<DIM; j++){ printf("%d ",grille[i][j].value); if ((j+1)%3==0) printf("| "); }
-		if ((i+1)%3==0) { printf("\n"); for (j=0;j<GBSIZE;j++) printf("-"); }
+		if ((i+1)%DIM_Region==0) { printf("\n"); for (j=0;j<GBSIZE;j++) printf("-"); }
 		printf("\n");
 	}
 	printf("\n");
