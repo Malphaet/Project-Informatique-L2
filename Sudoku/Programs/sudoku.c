@@ -19,14 +19,19 @@
 int main(void)
 {
 	char path[]="../Data/grille2.txt";
+	int i=1;
 	GRILLE grille;
 	PILE_CASE Pile;
 	init_grille(grille);
 	saisie_grille(grille,path);
-	affiche_grille(grille);
-	affiche_case(grille[1][1]);
 	init_pile_case(grille, &Pile);
-	affiche_pile(&Pile);
+	
+	affiche_grille(grille);
+	/* affiche_case(grille[1][1]); */
+	/* affiche_pile(&Pile); */
+	
+	while (supprime_candidat(&grille[0][0],i++)) affiche_case(grille[0][0]);
+	
 	return 0;
 }
 

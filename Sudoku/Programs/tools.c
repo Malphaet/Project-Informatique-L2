@@ -74,6 +74,13 @@ void remplit_case(CASE *c, int chiffre)
 	c->value=chiffre;
 }
 
+int supprime_candidat(CASE *c,int candidat){
+	if (c->value || c->nb_candidats<2 || !c->candidats[candidat-1]) return 0;
+	c->candidats[candidat-1]=0;
+	c->nb_candidats--;
+	return 1;
+}
+
 /* ================================================== */
 /* ==============       Affichage        ============ */
 /* ================================================== */
@@ -100,7 +107,7 @@ void affiche_case(CASE c)
 	for (i=0;i<DIM;i++)
 		if (c.candidats[i]==1)
 			printf("%d ",i+1);
-	printf("\nCase remplie : %s",c.value==0?"NON":"OUI");
+	printf("\nCase remplie : %s",!c.value?"NON":"OUI");
 	printf("\n");
 	printf("Cordonnees : Ligne %d, Colonne %d\n", c.row, c.col);
 }
@@ -120,7 +127,7 @@ void saisie_grille(GRILLE g, char *adr)
 		for (j=0;j< DIM;j++)
 			{
 				fscanf(f,"%d",&val);
-				remplit_case(&g[i][j],val);
+				if (val) remplit_case(&g[i][j],val);
 			}
 	}
 	fclose(f);
