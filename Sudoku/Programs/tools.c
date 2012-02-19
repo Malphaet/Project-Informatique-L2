@@ -81,6 +81,33 @@ int supprime_candidat(CASE *c,int candidat){
 	return 1;
 }
 
+/* -------------------------------------------------- */
+/* --------------       Contraintes      ------------ */
+/* -------------------------------------------------- */
+
+int contrainte_unicite_ligne_case(GRILLE g, PILE_CASE *p, CASE *c){
+	int i=0,r=1;
+	while (i<DIM) 
+		if (supprime_candidat(&g[c->row][i++],c->value)) 
+			p->cases[++p->nb_cases] = c;
+		else
+			r=0; /* /!\ Un arret immediat me parait plus judicieux */
+	return r;
+}
+
+int contrainte_unicite_colone_case(GRILLE g, PILE_CASE *p, CASE *c){
+	int i=0,r=1;
+	while (i<DIM) 
+		if (supprime_candidat(&g[i++][c->col],c->value)) 
+			p->cases[++p->nb_cases] = c;
+		else
+			r=0; /* /!\ Un arret immediat me parait plus judicieux */
+	return r;
+}
+
+int contrainte_unicite_case(GRILLE g, PILE_CASE *p, CASE *c){
+
+}
 /* ================================================== */
 /* ==============       Affichage        ============ */
 /* ================================================== */

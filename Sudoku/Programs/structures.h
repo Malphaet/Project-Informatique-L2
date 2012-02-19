@@ -39,11 +39,15 @@ typedef CASE GRILLE[DIM][DIM];
 
 void init_grille(GRILLE); 					/* Tested */
 void affiche_grille(GRILLE);				/* Tested */
-void saisie_grille(GRILLE, char *);			/* Seems working */
+void saisie_grille(GRILLE, char *);			/* Tested */
 void init_case(CASE *, int, int);			/* Tested */
 void affiche_case(CASE);					/* Tested */
-void remplit_case(CASE *, int);				/* Seems Working */
+void remplit_case(CASE *, int);				/* Seems Working | Warning:Might be not well implemented */
 void init_pile_case(GRILLE, PILE_CASE *);	/* Tested */
 void affiche_pile(PILE_CASE *);				/* Tested */
-int supprime_candidat(CASE *,int);			/* In writing */
+int supprime_candidat(CASE *,int);			/* Seems Working | Warning:Might be not well implemented */
+int contrainte_unicite_ligne_case(GRILLE, PILE_CASE *, CASE *);		/* Seems Working | Warning:Might be not well implemented */
+int contrainte_unicite_colone_case(GRILLE, PILE_CASE *, CASE *);	/* Seems Working | Warning:Might be not well implemented */
+
+
 #endif
