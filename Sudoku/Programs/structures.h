@@ -45,9 +45,13 @@ void affiche_case(CASE);					/* Tested */
 void remplit_case(CASE *, int);				/* Seems Working | Warning:Might be not well implemented */
 void init_pile_case(GRILLE, PILE_CASE *);	/* Tested */
 void affiche_pile(PILE_CASE *);				/* Tested */
-int supprime_candidat(CASE *,int);			/* Seems Working | Warning:Might be not well implemented */
-int contrainte_unicite_ligne_case(GRILLE, PILE_CASE *, CASE *);		/* Seems Working | Warning:Might be not well implemented */
-int contrainte_unicite_colone_case(GRILLE, PILE_CASE *, CASE *);	/* Seems Working | Warning:Might be not well implemented */
-int contrainte_unicite_case(GRILLE, PILE_CASE *, CASE *);			/* Seems Working | Warning:Might be not well implemented */
+int supprime_candidat(CASE *,int);			/* Seems Working */
+int contrainte_unicite_ligne_case(GRILLE, PILE_CASE *, CASE *);		/* Seems Working */
+int contrainte_unicite_colone_case(GRILLE, PILE_CASE *, CASE *);	/* Seems Working */
+int contrainte_unicite_case(GRILLE, PILE_CASE *, CASE *);			/* Seems Working */
+int contrainte_unicite(GRILLE, PILE_CASE *);	/* Not Implemented */
+int contrainte_unicite_grille(GRILLE);		/* Seems Working */
+
+double total_candidats(GRILLE);
 
 #endif
