@@ -35,8 +35,11 @@ int main(void)
 	contrainte_unicite_ligne_case(grille, &Pile, &grille[1][1]);
 	i=0; while (i<DIM) affiche_case(grille[1][i++]);
 	*/
+	/*
 	i=1;
-	contrainte_unicite_case(grille, &Pile, &grille[2][0]);
+	contrainte_unicite_case(grille, &Pile, &grille[2][0]);*/
+	
+	contrainte_unicite_grille(grille);
 	
 	affiche_grille(grille);
 	return 0;
