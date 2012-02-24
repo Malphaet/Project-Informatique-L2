@@ -1,10 +1,10 @@
 /*----------------------------------*/
-/*		Sudoku Scholar Project		*/
+/*  Sudoku Scholar Project          */
 /*----------------------------------*/
-/*		Copyleft Maximilien Rigaut	*/
-/*				 Charly Celereau	*/
+/*  Copyleft Maximilien Rigaut      */
+/*           Charly Celereau        */
 /*----------------------------------*/
-/*		Date : 	 	10/02/12		*/
+/*  Date : 10/02/12                 */
 /*----------------------------------*/
 
 #ifndef __STRUCTURES__
@@ -39,10 +39,16 @@ typedef CASE GRILLE[DIM][DIM];
 
 void init_grille(GRILLE); 					/* Tested */
 void affiche_grille(GRILLE);				/* Tested */
-void saisie_grille(GRILLE, char *);			/* Seems working */
+void saisie_grille(GRILLE, char *);			/* Tested */
 void init_case(CASE *, int, int);			/* Tested */
 void affiche_case(CASE);					/* Tested */
-void remplit_case(CASE *, int);				/* Seems Working */
-void init_pile_case(GRILLE, PILE_CASE *);	/* In-test */
-void affiche_pile(PILE_CASE *);
+void remplit_case(CASE *, int);				/* Seems Working | Warning:Might be not well implemented */
+void init_pile_case(GRILLE, PILE_CASE *);	/* Tested */
+void affiche_pile(PILE_CASE *);				/* Tested */
+int supprime_candidat(CASE *,int);			/* Seems Working | Warning:Might be not well implemented */
+int contrainte_unicite_ligne_case(GRILLE, PILE_CASE *, CASE *);		/* Seems Working | Warning:Might be not well implemented */
+int contrainte_unicite_colone_case(GRILLE, PILE_CASE *, CASE *);	/* Seems Working | Warning:Might be not well implemented */
+int contrainte_unicite_case(GRILLE, PILE_CASE *, CASE *);			/* Seems Working | Warning:Might be not well implemented */
+int contrainte_unicite(GRILLE g, PILE_CASE *pile);	/* Seems Working | Warning:Might be not well implemented */
+
 #endif
