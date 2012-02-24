@@ -49,7 +49,8 @@ int supprime_candidat(CASE *,int);			/* Seems Working | Warning:Might be not wel
 int contrainte_unicite_ligne_case(GRILLE, PILE_CASE *, CASE *);		/* Seems Working */
 int contrainte_unicite_colone_case(GRILLE, PILE_CASE *, CASE *);	/* Seems Working */
 int contrainte_unicite_case(GRILLE, PILE_CASE *, CASE *);			/* Seems Working */
-
+int contrainte_unicite(GRILLE, PILE_CASE *);	/* Not Implemented */
+int contrainte_unicite_grille(GRILLE);		/* Not Implemented */
 
 
 #endif

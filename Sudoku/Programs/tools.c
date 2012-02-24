@@ -124,10 +124,19 @@ int contrainte_unicite_region_case(GRILLE g, PILE_CASE *p, CASE *c){
 			}
 	return 1;
 }
+
 int contrainte_unicite_case(GRILLE g, PILE_CASE *p, CASE *c){
 	return contrainte_unicite_colone_case(g,p,c) && contrainte_unicite_ligne_case(g,p,c) && contrainte_unicite_region_case(g,p,c);
 }
 
+int contrainte_unicite(GRILLE g, PILE_CASE *p){
+	return 1;
+}
+
+int contrainte_unicite_grille(GRILLE g){
+	PILE_CASE p;
+	return contrainte_unicite(g,&p);
+}
 /* ================================================== */
 /* ==============       Affichage        ============ */
 /* ================================================== */
