@@ -19,7 +19,7 @@
 int main(void)
 {
 	char path[]="../Data/grille2.txt";
-	/*int i;*/
+	int i;
 	GRILLE grille;
 	PILE_CASE Pile;
 	init_grille(grille);
@@ -30,13 +30,15 @@ int main(void)
 	/* affiche_case(grille[1][1]); */
 	/* affiche_pile(&Pile); */
 	/* while (supprime_candidat(&grille[0][0],i++)) affiche_case(grille[0][0]); */
-		
-	/* i=0; while (i<DIM) affiche_case(grille[1][i++]);
+	/*
+	i=0; while (i<DIM) affiche_case(grille[1][i++]);
 	contrainte_unicite_ligne_case(grille, &Pile, &grille[1][1]);
-	i=0; while (i<DIM) affiche_case(grille[1][i++]);*/
-
+	i=0; while (i<DIM) affiche_case(grille[1][i++]);
+	*/
+	i=1;
 	contrainte_unicite_case(grille, &Pile, &grille[2][0]);
 	
+	affiche_grille(grille);
 	return 0;
 }
 

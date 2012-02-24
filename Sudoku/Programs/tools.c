@@ -75,10 +75,14 @@ void remplit_case(CASE *c, int chiffre)
 }
 
 int supprime_candidat(CASE *c,int candidat){
-	if (c->value || c->nb_candidats<2) return 0;
-	if (!c->candidats[candidat-1]) return 1; /* Pas certain de l'implementation pour l'instant */
+	int i;
+	if (!c->candidats[candidat-1]) return 0;
 	c->candidats[candidat-1]=0;
 	c->nb_candidats--;
+	
+	if (c->nb_candidats==1) for(i=0;i<DIM;i++) if (c->candidats[i]) c->value=i+1;
+	else if (!c->nb_candidats) c->value=0;
+	
 	return 1;
 }
 
@@ -87,42 +91,43 @@ int supprime_candidat(CASE *c,int candidat){
 /* -------------------------------------------------- */
 
 int contrainte_unicite_ligne_case(GRILLE g, PILE_CASE *p, CASE *c){
-	int i=0,r=1;
+	int i=0;
 	while (i<DIM) 
-		if (supprime_candidat(&g[c->row][i++],c->value)) 
-			p->cases[++p->nb_cases] = c;
-		else
-			r=0; /* /!\ Un arret immediat me parait plus judicieux */
-	return r;
+		if (i++!=c->col-1){
+			if (supprime_candidat(&g[c->row][i],c->value))  p->cases[++p->nb_cases] = c;
+			else return 0; /* /!\ Arret immediat */
+		}
+	return 1;
 }
 
+/* Same Path */
 int contrainte_unicite_colone_case(GRILLE g, PILE_CASE *p, CASE *c){
-	int i=0,r=1;
+	int i=0;
 	while (i<DIM) 
-		if (supprime_candidat(&g[i++][c->col],c->value)) 
-			p->cases[++p->nb_cases] = c;
-		else
-			r=0; /* /!\ Un arret immediat me parait plus judicieux */
-	return r;
+		if (i++!=c->row){
+			if (supprime_candidat(&g[i][c->col],c->value))  p->cases[++p->nb_cases] = c;
+			else return 0;
+		}
+	return 1;
 }
 
-int contrainte_unicite_case(GRILLE g, PILE_CASE *p, CASE *c){
-	int x,y, i,j, r=1;
-	x=c->col/DIM_Region;
-	y=c->row/DIM_Region;
+int contrainte_unicite_region_case(GRILLE g, PILE_CASE *p, CASE *c){
+	int x,y, i,j;
+	x=(c->col/DIM_Region)*DIM_Region;
+	y=(c->row/DIM_Region)*DIM_Region;
 
 	for (i=0; i<DIM_Region; i++)
 		for (j=0; j<DIM_Region; j++)
 			if ((x+i) != c->row || (y+j) != c->col){ /* Inutile d'essayer de se supprimer */
-				if (supprime_candidat(&g[x+i][y+j],c->value))
-					p->cases[++p->nb_cases] = c;
-				else
-					r=0; /* /!\ Un arret immediat me parait plus judicieux */
+				if (supprime_candidat(&g[x+i][y+j],c->value)) p->cases[++p->nb_cases] = c;
+				else return 0; /* /!\ Arret immediat */
 			}
-	r=contrainte_unicite_colone_case(g,p,c) && r;
-	r=contrainte_unicite_ligne_case(g,p,c) && r;
-	return r;
+	return 1;
 }
+int contrainte_unicite_case(GRILLE g, PILE_CASE *p, CASE *c){
+	return contrainte_unicite_colone_case(g,p,c) && contrainte_unicite_ligne_case(g,p,c) && contrainte_unicite_region_case(g,p,c);
+}
+
 /* ================================================== */
 /* ==============       Affichage        ============ */
 /* ================================================== */
