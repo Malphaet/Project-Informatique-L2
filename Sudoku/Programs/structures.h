@@ -1,11 +1,19 @@
-/*----------------------------------*/
-/*  Sudoku Scholar Project          */
-/*----------------------------------*/
-/*  Copyleft Maximilien Rigaut      */
-/*           Charly Celereau        */
-/*----------------------------------*/
-/*  Date : 10/02/12                 */
-/*----------------------------------*/
+/*
+ * structures.h
+ * This file is part of Sudoku Scholar Project
+ *
+ * Copyright (C) 2012 - Maximilien Rigaut & Charly Celereau
+ *
+ * Sudoku Scholar Project is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Sudoku Scholar Project is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
 
 #ifndef __STRUCTURES__
 #define __STRUCTURES__
@@ -37,25 +45,25 @@ typedef struct
 typedef CASE* GRILLE[DIM][DIM];
 /************* Prototype ************/
 
-void init_grille(GRILLE); 					/* Tested */
-void affiche_grille(GRILLE);				/* Tested */
-void saisie_grille(GRILLE, char *);			/* Tested */
-void init_case(CASE *, int, int);			/* Tested */
-void remplit_case(CASE *, int);				/* Seems Working | Warning:Might be not well implemented */
-void init_pile_case(GRILLE, PILE_CASE *);	/* Tested */
-void affiche_pile(PILE_CASE *);				/* Tested */
-int supprime_candidat(CASE *,int);			/* Seems Working */
-int contrainte_unicite_ligne_case(GRILLE, PILE_CASE *, CASE *);		/* Seems Working */
-int contrainte_unicite_colone_case(GRILLE, PILE_CASE *, CASE *);	/* Seems Working */
-int contrainte_unicite_case(GRILLE, PILE_CASE *, CASE *);			/* Seems Working */
-int contrainte_unicite(GRILLE, PILE_CASE *);	/* Not Implemented */
-int contrainte_unicite_grille(GRILLE);		/* Seems Working */
+void init_grille(GRILLE);											   /* Tested */
+void affiche_grille(GRILLE);											/* Tested */
+void saisie_grille(GRILLE, char *);									 /* Tested */
+void init_case(CASE *, int, int);									   /* Tested */
+void remplit_case(CASE *, int);										 /* Seems Working */
+void init_pile_case(GRILLE, PILE_CASE *);							   /* Tested */
+void affiche_pile(PILE_CASE *);										 /* Tested */
+int supprime_candidat(CASE *,int);									  /* Seems Working */
+int contrainte_unicite_ligne_case(GRILLE, PILE_CASE *, CASE *);		 /* Seems Working */
+int contrainte_unicite_colone_case(GRILLE, PILE_CASE *, CASE *);		/* Seems Working */
+int contrainte_unicite_case(GRILLE, PILE_CASE *, CASE *);			   /* Seems Working */
+int contrainte_unicite(GRILLE, PILE_CASE *);							/* Not Implemented */
+int contrainte_unicite_grille(GRILLE);								  /* Seems Working */
 
-double total_candidats(GRILLE);				/* Not implemented */
+double total_candidats(GRILLE);										 /* Not implemented */
 
 /** Fonctions test **/
-void affiche_case(CASE *);					/* Tested */
-void test_norm(GRILLE);					    /* Tested */
-int test_case(CASE *);					    /* Tested */
-void pr_i_case(CASE *c);					/* Indev */
+void affiche_case(CASE *);											  /* Tested */
+void test_norm(GRILLE);												 /* Tested */
+int test_case(CASE *);												  /* Tested */
+void pr_i_case(CASE *c);												/* Seems Working */
 #endif
