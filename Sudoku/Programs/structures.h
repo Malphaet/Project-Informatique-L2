@@ -34,7 +34,7 @@ typedef struct
 } PILE_CASE;
 
 /* Grille de Sudoku */
-typedef CASE GRILLE[DIM][DIM];
+typedef CASE* GRILLE[DIM][DIM];
 /************* Prototype ************/
 
 void init_grille(GRILLE); 					/* Tested */
@@ -54,8 +54,8 @@ int contrainte_unicite_grille(GRILLE);		/* Seems Working */
 double total_candidats(GRILLE);				/* Not implemented */
 
 /** Fonctions test **/
-void affiche_case(CASE);					/* Tested */
+void affiche_case(CASE *);					/* Tested */
 void test_norm(GRILLE);					    /* Tested */
 int test_case(CASE *);					    /* Tested */
-void pr_i_case(CASE *c);
+void pr_i_case(CASE *c);					/* Indev */
 #endif

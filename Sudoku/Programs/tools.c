@@ -10,6 +10,7 @@
 /************* Includes *************/
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "tools.h"
 
 
@@ -27,11 +28,12 @@
 void init_grille(GRILLE Grille)
 {
 	int i, j;
-	CASE c;
+	CASE *c;
 	for(i = 0;i < DIM; i++)
 		for(j = 0; j < DIM; j++)
 			{
-				init_case(&c,i,j);
+				c=malloc(sizeof(CASE));TEST(c);
+				init_case(c,i,j);
 				Grille[i][j] = c;
 			}
 }
@@ -44,8 +46,8 @@ void init_pile_case(GRILLE g, PILE_CASE *pile)
 	for(i = 0; i < DIM; i++)
 		for(j = 0; j < DIM; j++)
 		/* Si la case est remplie : la mettre dans la pile */
-			if(g[i][j].value != 0)
-				pile->cases[pile->nb_cases++] = &g[i][j];
+			if(g[i][j]->value != 0)
+				pile->cases[pile->nb_cases++] = g[i][j];
 }
 
 /* Initialisation d'une case, tous les chiffres sont candidats */
@@ -82,7 +84,7 @@ int supprime_candidat(CASE *c,int candidat){
 	c->candidats[candidat-1]=0;
 	c->nb_candidats--;
 
-	if (c->nb_candidats==1) for(i=0;i<DIM;i++) if (c->candidats[i]) {c->value=i+1; /*c->candidats[i]=0;*/ PL; affiche_case(*c); return 1;}
+	if (c->nb_candidats==1) for(i=0;i<DIM;i++) if (c->candidats[i]) {c->value=i+1; /*c->candidats[i]=0;*/ PL; affiche_case(c); return 1;}
 	if (!c->nb_candidats) {PL; /*c->value=0;*/} /* Erreur la grille n'as plus de solution : exit failure ou approchant serait envisageable*/
 
 	return 1;
@@ -98,7 +100,7 @@ int contrainte_unicite_ligne_case(GRILLE g, PILE_CASE *p, CASE *c){
 	
 	while (i<DIM) 
 		if (i++!=c->col){ /* Inutile d'essayer de se supprimer */
-			if (supprime_candidat(&g[c->row][i-1],c->value)) p->cases[p->nb_cases++] = c;
+			if (supprime_candidat(g[c->row][i-1],c->value)) p->cases[p->nb_cases++] = c;
 			/*else return 0;*/ /* /!\ Arret immediat */
 		}
 	return 1;
@@ -110,7 +112,7 @@ int contrainte_unicite_colone_case(GRILLE g, PILE_CASE *p, CASE *c){
 	
 	while (i<DIM) 
 		if (i++!=c->row){ /* Inutile d'essayer de se supprimer */
-			if (supprime_candidat(&g[i-1][c->col],c->value))  p->cases[p->nb_cases++] = c;
+			if (supprime_candidat(g[i-1][c->col],c->value))  p->cases[p->nb_cases++] = c;
 			/*else return 0;*/ /* /!\ Arret immediat */
 		}
 	return 1;
@@ -125,7 +127,7 @@ int contrainte_unicite_region_case(GRILLE g, PILE_CASE *p, CASE *c){
 	for (i=0; i<DIM_Region; i++)
 		for (j=0; j<DIM_Region; j++)
 			if ((x+i) != c->row || (y+j) != c->col){ /* Inutile d'essayer de se supprimer */
-				if (supprime_candidat(&g[x+i][y+j],c->value)) p->cases[p->nb_cases++] = c;
+				if (supprime_candidat(g[x+i][y+j],c->value)) p->cases[p->nb_cases++] = c;
 				/*else return 0;*/ /* /!\ Arret immediat */
 			}
 	return 1;
@@ -166,7 +168,7 @@ double total_candidats(GRILLE g){
 	double r=1;
 	for (i=0;i<DIM; i++)
 		for (j=0;j<DIM;j++)
-			r*=g[i][j].nb_candidats;
+			r*=g[i][j]->nb_candidats;
 	return r;
 }
 
@@ -180,7 +182,7 @@ void affiche_grille(GRILLE grille){
 	printf("\n"); for (j=0;j<GBSIZE;j++) printf("-"); printf("\n");
 	for (i=0;i<DIM;i++){ 
 		printf("| ");
-		for (j=0;j<DIM; j++){ printf("%d ",grille[i][j].value); if ((j+1)%3==0) printf("| "); }
+		for (j=0;j<DIM; j++){ printf("%d ",grille[i][j]->value); if ((j+1)%3==0) printf("| "); }
 		if ((i+1)%DIM_Region==0) { printf("\n"); for (j=0;j<GBSIZE;j++) printf("-"); }
 		printf("\n");
 	}
@@ -188,16 +190,16 @@ void affiche_grille(GRILLE grille){
 }
 
 /* Affiche une variable de type CASE */
-void affiche_case(CASE c)
+void affiche_case(CASE *c)
 {
 	int i;
-	printf("Nombre de candidats : %d\n",c.nb_candidats);
+	printf("Nombre de candidats : %d\n",c->nb_candidats);
 	printf("Candidats : ");
 	for (i=0;i<DIM;i++)
-		if (c.candidats[i]==1)
+		if (c->candidats[i]==1)
 			printf("%d ",i+1);
-	printf("\nCase remplie : %s",!c.value?"NON":"OUI"); printf(" : %d\n",c.value);
-	printf("Cordonnees : Ligne %d, Colonne %d\n", c.row, c.col);
+	printf("\nCase remplie : %s",!c->value?"NON":"OUI"); printf(" : %d\n",c->value);
+	printf("Cordonnees : Ligne %d, Colonne %d\n", c->row, c->col);
 }
 
 /* ================================================== */
@@ -206,14 +208,14 @@ void affiche_case(CASE c)
 
 /* Saisie d'une grille a partir d'un fichier */
 /* Les "chiffres" peuvent etre > 9 mais doivent etre separes par un (ou plusieurs) espace */
-void saisie_grille(GRILLE *g, char *adr){
+void saisie_grille(GRILLE g, char *adr){
 	int i,j,val;
 	FILE *f;
 	f=fopen(adr,"r");
 	for (i=0;i<DIM;i++)
 		for (j=0;j< DIM;j++){
 				fscanf(f,"%d",&val);
-				if (val) remplit_case(&g[i][j],val);
+				if (val) remplit_case(g[i][j],val);
 			}
 	fclose(f);
 }
@@ -226,12 +228,12 @@ void test_norm(GRILLE g){
 	int i, j, r=1;
 	for (i=0;i<DIM;i++)
 		for (j=0;j<DIM;j++)
-			if (!test_case(&g[i][j])) {r=0; affiche_case(g[i][j]);}
+			if (!test_case(g[i][j])) {r=0; affiche_case(g[i][j]);}
 	printf("%s\n",r?"Grille conforme":"Grille malformee");		
 }
 
 void pr_i_case(CASE *c){
-	if (!test_case(c)) affiche_case(*c);
+	if (!test_case(c)) affiche_case(c);
 }
 
 int test_case(CASE *c){
