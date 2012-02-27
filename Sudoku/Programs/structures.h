@@ -43,27 +43,37 @@ typedef struct
 
 /* Grille de Sudoku */
 typedef CASE* GRILLE[DIM][DIM];
+
 /************* Prototype ************/
 
-void init_grille(GRILLE);											/* Tested */
-void affiche_grille(GRILLE);										/* Tested */
-void saisie_grille(GRILLE, char *);									/* Tested */
+/** Fonctions d'initialisation **/
 void init_case(CASE *, int, int);									/* Tested */
-void remplit_case(CASE *, int);										/* Seems Working */
 void init_pile_case(GRILLE, PILE_CASE *);							/* Tested */
-void affiche_pile(PILE_CASE *);										/* Tested */
-int supprime_candidat(CASE *,PILE_CASE *,int);							/* Seems Working */
+void init_grille(GRILLE);											/* Tested */
+
+/** Fonctions de saisie **/
+void saisie_grille(GRILLE, char *);									/* Tested */
+void remplit_case(CASE *, int);										/* Implementation questionable */
+
+/** Fonctions de contraintes **/
+int supprime_candidat(CASE *,PILE_CASE *,int);						/* Seems Working */
 int contrainte_unicite_ligne_case(GRILLE, PILE_CASE *, CASE *);		/* Seems Working */
 int contrainte_unicite_colone_case(GRILLE, PILE_CASE *, CASE *);	/* Seems Working */
 int contrainte_unicite_case(GRILLE, PILE_CASE *, CASE *);			/* Seems Working */
-int contrainte_unicite(GRILLE, PILE_CASE *);						/* Not Implemented */
+int contrainte_unicite(GRILLE, PILE_CASE *);						/* Seems Working */
 int contrainte_unicite_grille(GRILLE);								/* Seems Working */
 
-double total_candidats(GRILLE);										/* Not implemented */
+double total_candidats(GRILLE);										/* Seems Working */
 
-/** Fonctions test **/
+/** Fonctions d'affichage **/
+void affiche_pile(PILE_CASE *);										/* Tested */
 void affiche_case(CASE *);											/* Tested */
+void affiche_grille(GRILLE);										/* Tested */
+void affiche_grille_candidats(GRILLE);
+
+/** Fonctions de test **/
 void test_norm(GRILLE);												/* Tested */
 int test_case(CASE *);												/* Tested */
 void pr_i_case(CASE *c);											/* Seems Working */
+
 #endif

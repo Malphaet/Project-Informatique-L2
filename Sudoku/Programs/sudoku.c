@@ -31,13 +31,10 @@ int main(void)
 	GRILLE grille;
 	PILE_CASE Pile;
 	init_grille(grille);
-	test_norm(grille);
 	saisie_grille(grille,path);
-	test_norm(grille);
 	init_pile_case(grille, &Pile);
-	test_norm(grille);
 	affiche_grille(grille);
-	test_norm(grille);
+	affiche_grille_candidats(grille);
 	/* affiche_case(grille[0][2]); */
 	
 	/*
@@ -45,21 +42,10 @@ int main(void)
 	contrainte_unicite_ligne_case(grille, &Pile, &grille[1][1]);
 	i=0; while (i<DIM) affiche_case(grille[1][i++]);
 	*/
-	
+	printf("%f\n",total_candidats(grille));
 	contrainte_unicite_grille(grille);
-	
-	/*contrainte_unicite_grille(grille); contrainte_unicite_grille(grille); contrainte_unicite_grille(grille); contrainte_unicite_grille(grille);*/
+	printf("%f\n",total_candidats(grille));
 	affiche_grille(grille);
+	affiche_grille_candidats(grille);
 	return 0;
-}
-
-
-/************ Test Functions *************/
-
-void affiche_pile(PILE_CASE *Pile)
-{
-	int i;
-	CASE **pile_ptr = Pile->cases;
-	for(i = 0; i < Pile->nb_cases; i++)
-			affiche_case(pile_ptr[i]);
 }
