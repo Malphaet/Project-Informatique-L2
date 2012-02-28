@@ -74,6 +74,5 @@ void affiche_grille_candidats(GRILLE);
 /** Fonctions de test **/
 void test_norm(GRILLE);												/* Tested */
 int test_case(CASE *);												/* Tested */
-void pr_i_case(CASE *c);											/* Seems Working */
 
 #endif

@@ -94,103 +94,75 @@ void remplit_case(CASE *c, int chiffre)
 
 int supprime_candidat(CASE *c,PILE_CASE *p,int candidat){
 	int i;
-	if (!c->candidats[candidat-1]) return 0;
-	if (c->value&&c->candidats[candidat-1]) FAIL; /* This grid only */
+	if (!c->candidats[candidat-1]) return 1; /* Si le nombre n'est pas candidat, il n'est pas utile de le supprimer */
 	
 	c->candidats[candidat-1]=0;
 	c->nb_candidats--;
 	
-	if (c->nb_candidats==1) 
+	/* Si il ne reste plus qu'un seul candidat, le mettre dans la case */
+	if (c->nb_candidats==1)
 		for(i=0;i<DIM;i++) 
 			if (c->candidats[i]) {
 				c->value=i+1;
-				/*affiche_pile(p);
-				printf("Add : "); affiche_case(c);*/
-				ADD_PILE(p,c);
-				/*affiche_pile(p);*/
-				/*c->candidats[i]=0;*/ /* Est-ce necessaire ? */
+				ADD_PILE(p,c); /* L'ajouter a la pile */
 				return 1;
 	}
-	if (c->nb_candidats<1 && !c->value) FAIL; /* Erreur la grille n'as plus de solution : exit failure ou approchant serait envisageable*/
-
+	/* Erreur la grille n'as plus de solution*/
+	if (c->nb_candidats<1 && !c->value) return 0;
+	
 	return 1;
 }
 
 /* -------------------------------------------------- */
 /* --------------	 	Contraintes	 	 ------------ */
 /* -------------------------------------------------- */
-#define NBC(c) (c)->nb_candidats
-#define CMP(x,c) if ((x)) {printf("    - "); affiche_case(c);} else {printf("    * "); affiche_case(c);}
 
 /* Applique les contraintes de la case, sur la ligne */
 int contrainte_unicite_ligne_case(GRILLE g, PILE_CASE *p, CASE *c){
 	int i;
-	/*int k,l;*/
 	for (i=0; i<DIM; i++)
-		if (i!=c->col){
-			/*k=NBC(g[c->row][i]);*/
-			supprime_candidat(g[c->row][i],p,c->value);
-			/*l=NBC(g[c->row][i]);
-			CMP(k-l,g[c->row][i]);*/
-			/*else return 0;*/ /* /!\ Arret immediat */
-		}
+		if (i!=c->col) 
+			if (!supprime_candidat(g[c->row][i],p,c->value)) return 0; /* /!\ Arret immediat */
 	return 1;
 }
 
 /* Applique les contraintes de la case, sur la colonne */
 int contrainte_unicite_colone_case(GRILLE g, PILE_CASE *p, CASE *c){
 	int i;
-	/*int k,l;*/
 	for (i=0; i<DIM; i++)
-		if (i!=c->row){
-			/*k=NBC(g[i][c->col]);*/
-			supprime_candidat(g[i][c->col],p,c->value);
-			/*l=NBC(g[i][c->col]);
-			CMP(k-l,g[i][c->col]);*/
-			/*else return 0;*/ /* /!\ Arret immediat */
-		}
+		if (i!=c->row)
+			if (!supprime_candidat(g[i][c->col],p,c->value)) return 0; /* /!\ Arret immediat */
 	return 1;
 }
 
 int contrainte_unicite_region_case(GRILLE g, PILE_CASE *p, CASE *c){
 	int x,y, i,j;
-	/*int k,l;*/
 	x=(c->row/DIM_Region)*DIM_Region;
 	y=(c->col/DIM_Region)*DIM_Region;
 
 	for (i=0; i<DIM_Region; i++)
 		for (j=0; j<DIM_Region; j++)
-			if ((x+i) != c->row || (y+j) != c->col){ /* Inutile d'essayer de se supprimer */
-				/*k=NBC(g[x+i][y+j]);*/
-				supprime_candidat(g[x+i][y+j],p,c->value);
-				/*l=NBC(g[x+i][y+j]);
-				CMP(k-l, g[x+i][y+j]);*/
-			}
+			if ((x+i) != c->row || (y+j) != c->col) /* Inutile d'essayer de se supprimer */
+				if (!supprime_candidat(g[x+i][y+j],p,c->value)) return 0;
 	return 1;
 }
 
 /* Applique toutes les contraintes associees a la case (ligne + colonne) */
 int contrainte_unicite_case(GRILLE g, PILE_CASE *p, CASE *c){
-	
-	contrainte_unicite_colone_case(g,p,c);
-	contrainte_unicite_ligne_case(g,p,c);
-	contrainte_unicite_region_case(g,p,c);
-
-	return 1;
+	/* Si une seule erreur est produite, tout doit s'arreter */
+	return contrainte_unicite_colone_case(g,p,c) && contrainte_unicite_ligne_case(g,p,c) && contrainte_unicite_region_case(g,p,c);
 }
 
 int contrainte_unicite(GRILLE g, PILE_CASE *p){
-	while (p->nb_cases){
-		/*printf("Pile [%d] :",p->nb_cases);affiche_case(p->cases[p->nb_cases-1]);*/
+	while (p->nb_cases)
+		/* Si une seule erreur est produite, tout doit s'arreter */
 		if (!contrainte_unicite_case(g,p,p->cases[--p->nb_cases])) return 0;
-	}
-	return 1;	
+	return 1;
 }
 
 int contrainte_unicite_grille(GRILLE g){
 	PILE_CASE Pile;
 	init_pile_case(g, &Pile);
-	/*printf("Pile [%d] \n",Pile.nb_cases);*/
 	return contrainte_unicite(g,&Pile);
 }
 /* ================================================== */
@@ -283,11 +255,6 @@ void test_norm(GRILLE g){
 			if (g[i][j]->row!=i || g[i][j]->col!=j) {r=0; affiche_case(g[i][j]);}
 		}
 	printf("%s\n",r?"Grille conforme":"Grille malformee");		
-}
-
-/* Deprecated */
-void pr_i_case(CASE *c){
-	if (!test_case(c)) affiche_case(c);
 }
 
 int test_case(CASE *c){
