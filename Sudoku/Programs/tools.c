@@ -216,7 +216,6 @@ int contrainte_unicite(GRILLE g, PILE_CASE *p){
 
 int contrainte_unicitheo(GRILLE g, PILE_CASE *p){
 	int r=0;
-	PL;
 	while (contrainte_theocycle_region(g,p) || contrainte_theocycle_ligne_colones(g,p))
 		r=1; /* Une modification a ete effectue */
 	return r;
@@ -225,8 +224,9 @@ int contrainte_unicitheo(GRILLE g, PILE_CASE *p){
 int contrainte_unicite_grille(GRILLE g){
 	PILE_CASE Pile;
 	init_pile_case(g, &Pile);
-	contrainte_unicite(g,&Pile);
-	return contrainte_unicitheo(g,&Pile);
+	while (contrainte_unicite(g,&Pile))
+		if (!contrainte_unicitheo(g,&Pile)) return 1;
+	return 0;
 }
 /* ================================================== */
 /* ==============		 Calculs		 ============ */
