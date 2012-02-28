@@ -133,14 +133,22 @@ int contrainte_theocycle_ligne_colones(GRILLE g, PILE_CASE *p){
 }
 /* Appliquer les contraintes d'unicite etendue sur chaque region de la grille */
 int contrainte_theocycle_region(GRILLE g, PILE_CASE *p){
-	int x,y, i,j, add_p=0;
+	int x,y, i,j,k,l, add_p=0;
 	CASE * table[DIM];
+	
 	for (i=0; i<DIM_Region; i++){
 		for (j=0; j<DIM_Region; j++){
-			x=i*DIM_Region; y=j*DIM_Region;
-			table[j]=GR(x,y);
-		}
+			/*printf("\n");
+			PL;*/
+			for (k=0;k<DIM_Region; k++){
+				for (l=0;l<DIM_Region;l++){
+					x=i*DIM_Region+k; y=j*DIM_Region+l;
+					/*printf("(%d,%d) ",GR(x,y)->row,GR(x,y)->col);*/
+					table[k+DIM_Region*l]=GR(x,y);
+				}
+			}
 		add_p|=theocycle_table(table,p);
+		}
 	}
 	return add_p;
 }
@@ -160,8 +168,12 @@ int theocycle_table(CASE * table[DIM],PILE_CASE *p){
 			}
 		}
 		if (nb==1) {
-			remplit_case(r,j);
-			ADD_PILE(p,r); add_p=1; /* Des modifications ont etes effectues sur la pile */
+			if (!r->value) {
+				/*affiche_case(r);*/
+				remplit_case(r,i+1);
+				/*affiche_case(r);*/
+				ADD_PILE(p,r); add_p=1; /* Des modifications ont etes effectues sur la pile */
+			}
 		}
 	}
 	return add_p;
@@ -202,10 +214,19 @@ int contrainte_unicite(GRILLE g, PILE_CASE *p){
 	return 1;
 }
 
+int contrainte_unicitheo(GRILLE g, PILE_CASE *p){
+	int r=0;
+	PL;
+	while (contrainte_theocycle_region(g,p) || contrainte_theocycle_ligne_colones(g,p))
+		r=1; /* Une modification a ete effectue */
+	return r;
+}
+
 int contrainte_unicite_grille(GRILLE g){
 	PILE_CASE Pile;
 	init_pile_case(g, &Pile);
-	return contrainte_unicite(g,&Pile);
+	contrainte_unicite(g,&Pile);
+	return contrainte_unicitheo(g,&Pile);
 }
 /* ================================================== */
 /* ==============		 Calculs		 ============ */
