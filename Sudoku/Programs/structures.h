@@ -57,8 +57,7 @@ void remplit_case(CASE *, int);										/* Implementation questionable */
 
 /** Fonctions de contraintes **/
 int supprime_candidat(CASE *,PILE_CASE *,int);						/* Seems Working */
-int contrainte_unicite_ligne_case(GRILLE, PILE_CASE *, CASE *);		/* Seems Working */
-int contrainte_unicite_colone_case(GRILLE, PILE_CASE *, CASE *);	/* Seems Working */
+int contrainte_unicite_ligne_colone_case(GRILLE,PILE_CASE*,CASE*);	/* Seems Working */
 int contrainte_unicite_case(GRILLE, PILE_CASE *, CASE *);			/* Seems Working */
 int contrainte_unicite(GRILLE, PILE_CASE *);						/* Seems Working */
 int contrainte_unicite_grille(GRILLE);								/* Seems Working */

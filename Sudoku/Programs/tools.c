@@ -167,21 +167,13 @@ int theocycle_table(CASE * table[DIM],PILE_CASE *p){
 	return add_p;
 }
 
-/* Applique les contraintes de la case, sur la ligne */
-int contrainte_unicite_ligne_case(GRILLE g, PILE_CASE *p, CASE *c){
+/* Applique les contraintes de la case, sur sa colonne et sa ligne */
+int contrainte_unicite_ligne_colone_case(GRILLE g, PILE_CASE *p, CASE *c){
 	int i;
-	for (i=0; i<DIM; i++)
-		if (i!=c->col) 
-			if (!supprime_candidat(g[c->row][i],p,c->value)) return 0; /* /!\ Arret immediat */
-	return 1;
-}
-
-/* Applique les contraintes de la case, sur la colonne */
-int contrainte_unicite_colone_case(GRILLE g, PILE_CASE *p, CASE *c){
-	int i;
-	for (i=0; i<DIM; i++)
-		if (i!=c->row)
-			if (!supprime_candidat(g[i][c->col],p,c->value)) return 0; /* /!\ Arret immediat */
+	for (i=0; i<DIM; i++) {
+		if (i!=c->row) if (!supprime_candidat(g[i][c->col],p,c->value)) return 0; /* /!\ Arret immediat */
+		if (i!=c->col) if (!supprime_candidat(g[c->row][i],p,c->value)) return 0; /* /!\ Arret immediat */
+	}
 	return 1;
 }
 
@@ -200,7 +192,7 @@ int contrainte_unicite_region_case(GRILLE g, PILE_CASE *p, CASE *c){
 /* Applique toutes les contraintes associees a la case (ligne + colonne) */
 int contrainte_unicite_case(GRILLE g, PILE_CASE *p, CASE *c){
 	/* Si une seule erreur est produite, tout doit s'arreter */
-	return contrainte_unicite_colone_case(g,p,c) && contrainte_unicite_ligne_case(g,p,c) && contrainte_unicite_region_case(g,p,c);
+	return contrainte_unicite_ligne_colone_case(g,p,c) && contrainte_unicite_region_case(g,p,c);
 }
 
 int contrainte_unicite(GRILLE g, PILE_CASE *p){
