@@ -35,6 +35,7 @@
 /** Shortcuts **/
 #define ADD_PILE(p,c) (p)->cases[(p)->nb_cases++] = (c);
 #define ADD_PILE_IFONLY(p,c) if (c->nb_candidats==1) {PL;affiche_case(c); ADD_PILE(p,c); c->nb_candidats=0;}
+#define GR(x,y) g[x][y]
 /************* Functions ************/
 
 /* ================================================== */
@@ -135,6 +136,42 @@ int contrainte_unicite_ligne_case(GRILLE g, PILE_CASE *p, CASE *c){
 			/*else return 0;*/ /* /!\ Arret immediat */
 		}
 	return 1;
+}
+
+
+int contrainte_theocycle_ligne_colones(GRILLE g, PILE_CASE *p){
+	int i,j,add_p=0;
+	CASE* table[DIM],*table_2[DIM];
+	for (i=0;i<DIM;i++){
+		for (j=0;j<DIM;j++){
+			table[j]=GR(i,j); /* Ligne de cases */
+			table_2[j]=GR(j,i); /* Colone de cases */
+		}
+		add_p|=theocycle_table(table,p)|theocycle_table(table_2,p); /* Des modifications ont elles etes faites sur la pile ? */
+	}
+	return add_p;
+}
+
+/* Parmis le tableau si un candidat n'as qu'une place ou aller, alors l'unicite nous dit qu'il ce doit d'etre a cette place */
+int theocycle_table(CASE * table[DIM],PILE_CASE *p){
+	int i,j,nb,add_p=0;
+	CASE *r;
+	/* Pour chaque candidat 1...DIM */
+	for (i=0;i<DIM;i++){
+		nb=0;
+		/* Pour chaque case du tableau */
+		for (j=0;j<DIM;j++){
+			if (table[j]->candidats[i]){
+				if (nb++) break; /* Inutile de continuer, plusieurs places sont possibles */
+				r=table[j];
+			}
+		}
+		if (nb==1) {
+			remplit_case(r,j);
+			ADD_PILE(p,r); add_p=1; /* Des modifications ont etes effectues sur la pile */
+		}
+	}
+	return add_p;
 }
 
 /* Applique les contraintes de la case, sur la colonne */

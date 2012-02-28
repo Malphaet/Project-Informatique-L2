@@ -63,6 +63,10 @@ int contrainte_unicite_case(GRILLE, PILE_CASE *, CASE *);			/* Seems Working */
 int contrainte_unicite(GRILLE, PILE_CASE *);						/* Seems Working */
 int contrainte_unicite_grille(GRILLE);								/* Seems Working */
 
+int theocycle_table(CASE * table[DIM],PILE_CASE*);					/* Indev */
+int contrainte_theocycle_ligne_colones(GRILLE, PILE_CASE *);		/* Indev */
+
+/* Tools */
 double total_candidats(GRILLE);										/* Seems Working */
 
 /** Fonctions d'affichage **/
