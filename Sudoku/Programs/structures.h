@@ -53,17 +53,21 @@ void init_grille(GRILLE);											/* Tested */
 
 /** Fonctions de saisie **/
 void saisie_grille(GRILLE, char *);									/* Tested */
-void remplit_case(CASE *, int);										/* Implementation questionable */
+void remplit_case(CASE *, int);										/* Tested */
 
 /** Fonctions de contraintes **/
 int supprime_candidat(CASE *,PILE_CASE *,int);						/* Seems Working */
+int contrainte_unicite_grille(GRILLE);								/* Seems Working */
+
+/**** Unicite simple ****/
 int contrainte_unicite_ligne_colone_case(GRILLE,PILE_CASE*,CASE*);	/* Seems Working */
 int contrainte_unicite_case(GRILLE, PILE_CASE *, CASE *);			/* Seems Working */
 int contrainte_unicite(GRILLE, PILE_CASE *);						/* Seems Working */
-int contrainte_unicite_grille(GRILLE);								/* Seems Working */
 
-int theocycle_table(CASE * table[DIM],PILE_CASE*);					/* Indev */
-int contrainte_theocycle_ligne_colones(GRILLE, PILE_CASE *);		/* Indev */
+/**** Unicite etendue ****/
+int theocycle_table(CASE * table[DIM],PILE_CASE*);					/* Seems Working */
+int contrainte_theocycle_ligne_colones(GRILLE, PILE_CASE *);		/* Seems Working */
+int contrainte_theocycle_region(GRILLE,PILE_CASE *);				/* Seems Working */
 
 /* Tools */
 double total_candidats(GRILLE);										/* Seems Working */
@@ -72,7 +76,7 @@ double total_candidats(GRILLE);										/* Seems Working */
 void affiche_pile(PILE_CASE *);										/* Tested */
 void affiche_case(CASE *);											/* Tested */
 void affiche_grille(GRILLE);										/* Tested */
-void affiche_grille_candidats(GRILLE);
+void affiche_grille_candidats(GRILLE);								/* Tested */
 
 /** Fonctions de test **/
 void test_norm(GRILLE);												/* Tested */

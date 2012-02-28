@@ -26,26 +26,21 @@
 
 int main(void)
 {
-	char path[]="../Data/grille2.txt";
+	char path[]="../Data/grille3.txt";
 	
 	GRILLE grille;
-	PILE_CASE Pile;
+	/*PILE_CASE Pile;*/
 	init_grille(grille);
 	saisie_grille(grille,path);
-	init_pile_case(grille, &Pile);
+	/*init_pile_case(grille, &Pile);*/
 	affiche_grille(grille);
-	affiche_grille_candidats(grille);
-	/* affiche_case(grille[0][2]); */
+	/*affiche_grille_candidats(grille);*/
 	
-	/*
-	i=0; while (i<DIM) affiche_case(grille[1][i++]);
-	contrainte_unicite_ligne_case(grille, &Pile, &grille[1][1]);
-	i=0; while (i<DIM) affiche_case(grille[1][i++]);
-	*/
 	printf("%f\n",total_candidats(grille));
 	contrainte_unicite_grille(grille);
 	printf("%f\n",total_candidats(grille));
+	
 	affiche_grille(grille);
-	affiche_grille_candidats(grille);
+	/*affiche_grille_candidats(grille);*/
 	return 0;
 }
