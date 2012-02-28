@@ -123,22 +123,7 @@ int supprime_candidat(CASE *c,PILE_CASE *p,int candidat){
 #define NBC(c) (c)->nb_candidats
 #define CMP(x,c) if ((x)) {printf("    - "); affiche_case(c);} else {printf("    * "); affiche_case(c);}
 
-/* Applique les contraintes de la case, sur la ligne */
-int contrainte_unicite_ligne_case(GRILLE g, PILE_CASE *p, CASE *c){
-	int i;
-	/*int k,l;*/
-	for (i=0; i<DIM; i++)
-		if (i!=c->col){
-			/*k=NBC(g[c->row][i]);*/
-			supprime_candidat(g[c->row][i],p,c->value);
-			/*l=NBC(g[c->row][i]);
-			CMP(k-l,g[c->row][i]);*/
-			/*else return 0;*/ /* /!\ Arret immediat */
-		}
-	return 1;
-}
-
-
+/* Appliquer les contraintes d'unicite etendue sur les lignes et colones de la grille */
 int contrainte_theocycle_ligne_colones(GRILLE g, PILE_CASE *p){
 	int i,j,add_p=0;
 	CASE* table[DIM],*table_2[DIM];
@@ -148,6 +133,19 @@ int contrainte_theocycle_ligne_colones(GRILLE g, PILE_CASE *p){
 			table_2[j]=GR(j,i); /* Colone de cases */
 		}
 		add_p|=theocycle_table(table,p)|theocycle_table(table_2,p); /* Des modifications ont elles etes faites sur la pile ? */
+	}
+	return add_p;
+}
+/* Appliquer les contraintes d'unicite etendue sur chaque region de la grille */
+int contrainte_theocycle_region(GRILLE g, PILE_CASE *p){
+	int x,y, i,j, add_p=0;
+	CASE * table[DIM];
+	for (i=0; i<DIM_Region; i++){
+		for (j=0; j<DIM_Region; j++){
+			x=i*DIM_Region; y=j*DIM_Region;
+			table[j]=GR(x,y);
+		}
+		add_p|=theocycle_table(table,p);
 	}
 	return add_p;
 }
@@ -172,6 +170,21 @@ int theocycle_table(CASE * table[DIM],PILE_CASE *p){
 		}
 	}
 	return add_p;
+}
+
+/* Applique les contraintes de la case, sur la ligne */
+int contrainte_unicite_ligne_case(GRILLE g, PILE_CASE *p, CASE *c){
+	int i;
+	/*int k,l;*/
+	for (i=0; i<DIM; i++)
+		if (i!=c->col){
+			/*k=NBC(g[c->row][i]);*/
+			supprime_candidat(g[c->row][i],p,c->value);
+			/*l=NBC(g[c->row][i]);
+			CMP(k-l,g[c->row][i]);*/
+			/*else return 0;*/ /* /!\ Arret immediat */
+		}
+	return 1;
 }
 
 /* Applique les contraintes de la case, sur la colonne */
