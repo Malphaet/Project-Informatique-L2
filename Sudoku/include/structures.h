@@ -41,6 +41,13 @@ typedef struct
 	int nb_cases; /* Nombre d'elements dans de la pile */
 } PILE_CASE;
 
+typedef struct INFOS
+{
+	int nb_sols;
+	int depth;
+} infos;
+
+
 /* Grille de Sudoku */
 typedef CASE* GRILLE[DIM][DIM];
 
@@ -50,6 +57,7 @@ typedef CASE* GRILLE[DIM][DIM];
 void init_case(CASE *, int, int);									/* Tested */
 void init_pile_case(GRILLE, PILE_CASE *);							/* Tested */
 void init_grille(GRILLE);											/* Tested */
+void supprime_grille(GRILLE);
 
 /* = Fonctions de saisie = */
 void saisie_grille(GRILLE, char *);									/* Tested */
@@ -66,6 +74,7 @@ int contrainte_unicite_grille(GRILLE);								/* Seems Working */
 int contrainte_unicite_ligne_colone_case(GRILLE,PILE_CASE*,CASE*);	/* Seems Working */
 int contrainte_unicite_case(GRILLE, PILE_CASE *, CASE *);			/* Seems Working */
 int contrainte_unicite(GRILLE, PILE_CASE *);						/* Seems Working */
+int contrainte_unicite_simple(GRILLE);
 
 /* === Unicite etendue === */
 int theocycle_table(CASE * table[DIM],PILE_CASE*);					/* Seems Working */
@@ -79,6 +88,9 @@ int test_is_empty(GRILLE *);
 int test_is_solution(GRILLE *);
 int first_candidate(CASE *, int);
 CASE *first_empty_case(GRILLE *);
+CASE *smaller_case(GRILLE *);
+int check_grid(GRILLE *g2,CASE *C1);
+int backtracking_infos(GRILLE *,GRILLE *,infos *);
 
 /* Tools */
 double total_candidats(GRILLE);										/* Seems Working */

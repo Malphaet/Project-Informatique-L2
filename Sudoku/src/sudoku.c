@@ -26,25 +26,34 @@
 
 int main(void)
 {
-	char path[]="./data/grille1.txt";
-	
+	char path[]="./data/eleven.txt";
 	GRILLE grille,gres;
-	/*PILE_CASE Pile;*/
+	infos nfo={0,0};
+	
 	init_grille(grille);
 	saisie_grille(grille,path);
-	/*init_pile_case(grille, &Pile);*/
+
 	affiche_grille(grille);
-	/*affiche_grille_candidats(grille);*/
+	
 	
 	printf("%f\n",total_candidats(grille));
 	contrainte_unicite_grille(grille);
 	printf("%f\n",total_candidats(grille));
 	
 	init_grille(gres);
-	/*backtracking_resolution(&grille,&gres);*/
+	
+	backtracking_resolution(&grille,&gres);
 	
 	affiche_grille(grille);
+	affiche_grille(gres);
+	/*affiche_grille_candidats(gres);*/
+	if (0) {
+		init_grille(gres); init_grille(grille); saisie_grille(grille,path);
+		printf("Infos complementaires :\n");
+		backtracking_infos(&grille,&gres,&nfo);
+		printf("Nb solutions : %d\n",nfo.nb_sols);
+		printf("Nb nodes explorees : %d\n",nfo.depth);
+	}
 	
-	/*affiche_grille_candidats(grille);*/
 	return 0;
 }
