@@ -79,6 +79,7 @@ int test_is_empty(GRILLE *);
 int test_is_solution(GRILLE *);
 int first_candidate(CASE *, int);
 CASE *first_empty_case(GRILLE *);
+int check_grid(GRILLE *g2,CASE *C1);
 
 /* Tools */
 double total_candidats(GRILLE);										/* Seems Working */

@@ -41,10 +41,11 @@ int main(void)
 	printf("%f\n",total_candidats(grille));
 	
 	init_grille(gres);
-	/*backtracking_resolution(&grille,&gres);*/
+	backtracking_resolution(&grille,&gres);
 	
 	affiche_grille(grille);
+	affiche_grille(gres);
 	
-	/*affiche_grille_candidats(grille);*/
+	/*affiche_grille_candidats(gres);*/
 	return 0;
 }

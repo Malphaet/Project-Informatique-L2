@@ -100,6 +100,7 @@ CASE *copy_case(CASE *c){
 	CASE *c2=malloc(sizeof(CASE));
 	init_case(c2,c->row,c->col);
 	c2->value=c->value;
+	c2->nb_candidats=c->nb_candidats;
 	for (i=0;i<DIM;i+=1) c2->candidats[i]=c->candidats[i];
 	return c2;
 }

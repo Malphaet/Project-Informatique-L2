@@ -26,7 +26,8 @@
 
 /** Si la g contient une solution l'ecrire dans gres */
 int backtracking_resolution(GRILLE *g,GRILLE *gres){
-	int pos,tf,i,j;
+	int pos,tf;
+	int ok;
 	GRILLE *g2=malloc(sizeof(GRILLE));
 	CASE *C1,*Ctemp=malloc(sizeof(CASE)); TEST(Ctemp);
 	/** La grille est elle resolue */
@@ -38,17 +39,19 @@ int backtracking_resolution(GRILLE *g,GRILLE *gres){
 	
 	for (pos=0;pos<DIM;pos+=1){
 		/** Copier la grille */
+		ok=1;
 		free(g2); g2=copy_grid(g);
 		C1=first_empty_case(g2);
 		if (C1==NULL) return 0;
 		
 		tf=first_candidate(C1,pos);
-		if (tf==DIM) return 0;
+
+		if (tf==DIM+1) return 0;
 		remplit_case(C1,tf);
-		for (i=0;i<DIM;i+=1) for (j=0;j<DIM;j+=1)
-			if ((*g2)[i][j]->value==tf || (*g2)[j][i]->value==tf) return 0;
-		/*if (!contrainte_unicite_grille(*g2)) return 0; */
-		if (backtracking_resolution(g2,gres)) return 1;
+		
+		contrainte_unicite_grille(*g2);
+		if (check_grid(g2,C1)) if (backtracking_resolution(g2,gres)) return 1;
+		
 	}
 	return 0;
 }
@@ -63,16 +66,35 @@ int test_is_empty(GRILLE *g){
 	return 1;
 }
 
+/** Renvoie la premiere case vide de la grille */
 CASE *first_empty_case(GRILLE *g){
 	int i,j;
 	for (i=0;i<DIM;i+=1)
 		for (j=0;j<DIM;j+=1)
-			if ((*g)[i][j]->value) return (*g)[i][j];
+			if (!(*g)[i][j]->value) return (*g)[i][j];
 	return NULL;
 }
 
+/** Renvoie le premier candidat a partir de la position pos */
 int first_candidate(CASE *c, int pos){
 	int i;
-	for (i=pos;i<DIM;i+=1) if (!c->candidats[i]) return i+1;
-	return DIM;
+	for (i=pos;i<DIM;i+=1) if (c->candidats[i]) return i+1;
+	return DIM+1;
+}
+
+/** Verifie que la grille possede une solution */
+int check_grid(GRILLE *g2,CASE *C1){
+	int x,y,i,j,I,J,tf;
+	x=C1->row;
+	y=C1->col;
+	tf=C1->value;
+	I=(x/DIM_Region)*DIM_Region; J=(y/DIM_Region)*DIM_Region;
+	
+	for (i=0;i<DIM;i+=1)
+		if ((i!=x && (*g2)[i][y]->value==tf) || (i!=y && (*g2)[x][i]->value==tf)) return 0;
+		
+	for (i=0;i<DIM_Region;i+=1) for (j=0;j<DIM_Region;j+=1)
+		if ( (*g2)[i+I][j+J]->value==tf && (i+I!=x ||j+J!=y) ) return 0;
+	
+	return 1;
 }

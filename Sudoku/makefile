@@ -42,6 +42,6 @@ clean:
 	rm -f $(OBJ)/*.o
 	
 cleaner: clean
-	rm -f $(BIN)/$(EXEC)
+	rm -f $(EXEC)
 	rm -Rf $(DOC)/*
 
