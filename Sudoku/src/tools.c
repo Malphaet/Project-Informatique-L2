@@ -86,11 +86,12 @@ int supprime_candidat(CASE *c,PILE_CASE *p,int candidat){
 	if (c->nb_candidats==1)
 		for(i=0;i<DIM;i++) if (c->candidats[i]) {
 			c->value=i+1;
+			/*printf("Ligne: %d, Colone: %d => %d \n",c->row+1,c->col+1,c->value);*/
 			ADD_PILE(p,c); /* L'ajouter a la pile */
 			return 1;
 		}
 	/* Erreur la grille n'as plus de solution */
-	if (c->nb_candidats<1 && !c->value) return 0;
+	if (c->nb_candidats<1 /*&& !c->value*/) return 0;
 	return 1;
 }
 
@@ -154,6 +155,13 @@ int contrainte_unicite_grille(GRILLE g){
 	while (contrainte_unicite(g,&Pile)) /* Tant que la grille est soluble, lui appliquer les deux contraintes d'unicite */
 		if (!contrainte_unicitheo(g,&Pile)) return 1; /* Si aucun nombre n'as ete ajoute, s'arreter */
 	return 0; /* La grille est insoluble */
+}
+
+/** Appliquer les contraintes d'unicite simples a la grille. */
+int contrainte_unicite_simple(GRILLE grille){
+	PILE_CASE p;
+	init_pile_case(grille,&p);
+	return contrainte_unicite(grille, &p);
 }
 
 /** Applique les contraintes de la case, sur sa colonne et sa ligne */

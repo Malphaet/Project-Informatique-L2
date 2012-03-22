@@ -25,9 +25,11 @@
 /* ===========  Functions  =========== */
 
 /** Si la g contient une solution l'ecrire dans gres */
-int backtracking_resolution(GRILLE *g,GRILLE *gres){
+
+int backtracking_resolution(GRILLE *g,GRILLE *gres,int*nb_sols){
 	int pos,tf;
 	int ok;
+	
 	GRILLE *g2=malloc(sizeof(GRILLE));
 	CASE *C1,*Ctemp=malloc(sizeof(CASE)); TEST(Ctemp);
 	/** La grille est elle resolue */
@@ -42,16 +44,19 @@ int backtracking_resolution(GRILLE *g,GRILLE *gres){
 		ok=1;
 		free(g2); g2=copy_grid(g);
 		C1=first_empty_case(g2);
+		printf("(%d,%d)",C1->row+1,C1->col+1);
 		if (C1==NULL) return 0;
 		
 		tf=first_candidate(C1,pos);
-
+		printf(" Test: %d \n",tf);
 		if (tf==DIM+1) return 0;
 		remplit_case(C1,tf);
 		
-		contrainte_unicite_grille(*g2);
-		if (check_grid(g2,C1)) if (backtracking_resolution(g2,gres)) return 1;
 		
+		if (contrainte_unicite_simple(*g2) && check_grid(g2,C1)) {
+			if (backtracking_resolution(g2,gres,nb_sols)) (*nb_sols)++;
+		} else printf("    Fail\n");
+		if (tf-1>pos) pos=tf-1;
 	}
 	return 0;
 }

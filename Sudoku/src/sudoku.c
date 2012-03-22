@@ -26,26 +26,32 @@
 
 int main(void)
 {
-	char path[]="./data/grille1.txt";
-	
+	char path[]="./data/grilleC.txt";
+	int *nb_sols=malloc(sizeof(int));
+	*nb_sols=0;
 	GRILLE grille,gres;
+	
 	/*PILE_CASE Pile;*/
-	init_grille(grille);
+	init_grille(grille); init_grille(gres);
 	saisie_grille(grille,path);
+	
 	/*init_pile_case(grille, &Pile);*/
 	affiche_grille(grille);
 	/*affiche_grille_candidats(grille);*/
 	
-	printf("%f\n",total_candidats(grille));
-	contrainte_unicite_grille(grille);
+	/*printf("%f\n",total_candidats(grille));*/
+	contrainte_unicite_simple(grille);
+	/* contrainte_unicite_grille(grille); */
+	
 	printf("%f\n",total_candidats(grille));
 	
-	init_grille(gres);
-	backtracking_resolution(&grille,&gres);
 	
+	backtracking_resolution(&grille,&gres,nb_sols);
+	
+	printf("%d", *nb_sols);
 	affiche_grille(grille);
 	affiche_grille(gres);
 	
-	/*affiche_grille_candidats(gres);*/
+	affiche_grille_candidats(gres);
 	return 0;
 }

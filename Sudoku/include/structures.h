@@ -66,6 +66,7 @@ int contrainte_unicite_grille(GRILLE);								/* Seems Working */
 int contrainte_unicite_ligne_colone_case(GRILLE,PILE_CASE*,CASE*);	/* Seems Working */
 int contrainte_unicite_case(GRILLE, PILE_CASE *, CASE *);			/* Seems Working */
 int contrainte_unicite(GRILLE, PILE_CASE *);						/* Seems Working */
+int contrainte_unicite_simple(GRILLE);
 
 /* === Unicite etendue === */
 int theocycle_table(CASE * table[DIM],PILE_CASE*);					/* Seems Working */
@@ -74,7 +75,7 @@ int contrainte_theocycle_region(GRILLE,PILE_CASE *);				/* Seems Working */
 int contrainte_unicitheo(GRILLE, PILE_CASE *);
 
 /* === Backtracking === */
-int backtracking_resolution(GRILLE *,GRILLE *);
+int backtracking_resolution(GRILLE *,GRILLE *,int*);
 int test_is_empty(GRILLE *);
 int test_is_solution(GRILLE *);
 int first_candidate(CASE *, int);
