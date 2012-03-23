@@ -23,13 +23,13 @@
 
 /* ============ Typedef  =========== */
 
-/* Case */
+/** Structure d'une case */
 typedef struct CASE
 {
-	int candidats[DIM]; /* Nombres candidats pour la resolution de la case */
-	int nb_candidats; /* Nombre de candidats potentiels */
-	int value; /* Valeur de la case : 0 si non resolue; la valeur adaptee sinon */
-	/* Position de la case dans la grille (ligne, colone) */
+	int candidats[DIM]; /** Nombres candidats pour la resolution de la case */
+	int nb_candidats; /** Nombre de candidats potentiels */
+	int value; /** Valeur de la case : 0 si non resolue; la valeur adaptee sinon */
+	/** Position de la case dans la grille (ligne, colone) */
 	int row;
 	int col;
 } CASE;
@@ -54,6 +54,9 @@ void init_grille(GRILLE);											/* Tested */
 /* = Fonctions de saisie = */
 void saisie_grille(GRILLE, char *);									/* Tested */
 void remplit_case(CASE *, int);										/* Tested */
+CASE *copy_case(CASE *);											/* In-dev */
+GRILLE *copy_grid(GRILLE*);
+void rewrite_grid(GRILLE *,GRILLE *);
 
 /* = Fonctions de contraintes = */
 int supprime_candidat(CASE *,PILE_CASE *,int);						/* Seems Working */
@@ -64,10 +67,18 @@ int contrainte_unicite_ligne_colone_case(GRILLE,PILE_CASE*,CASE*);	/* Seems Work
 int contrainte_unicite_case(GRILLE, PILE_CASE *, CASE *);			/* Seems Working */
 int contrainte_unicite(GRILLE, PILE_CASE *);						/* Seems Working */
 
-/* Unicite etendue */
+/* === Unicite etendue === */
 int theocycle_table(CASE * table[DIM],PILE_CASE*);					/* Seems Working */
 int contrainte_theocycle_ligne_colones(GRILLE, PILE_CASE *);		/* Seems Working */
 int contrainte_theocycle_region(GRILLE,PILE_CASE *);				/* Seems Working */
+int contrainte_unicitheo(GRILLE, PILE_CASE *);
+
+/* === Backtracking === */
+int backtracking_resolution(GRILLE *,GRILLE *);
+int test_is_empty(GRILLE *);
+int test_is_solution(GRILLE *);
+int first_candidate(CASE *, int);
+CASE *first_empty_case(GRILLE *);
 
 /* Tools */
 double total_candidats(GRILLE);										/* Seems Working */

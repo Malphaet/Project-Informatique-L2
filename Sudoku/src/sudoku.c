@@ -26,9 +26,9 @@
 
 int main(void)
 {
-	char path[]="./data/grille3.txt";
+	char path[]="./data/grille1.txt";
 	
-	GRILLE grille;
+	GRILLE grille,gres;
 	/*PILE_CASE Pile;*/
 	init_grille(grille);
 	saisie_grille(grille,path);
@@ -40,7 +40,11 @@ int main(void)
 	contrainte_unicite_grille(grille);
 	printf("%f\n",total_candidats(grille));
 	
+	init_grille(gres);
+	/*backtracking_resolution(&grille,&gres);*/
+	
 	affiche_grille(grille);
+	
 	/*affiche_grille_candidats(grille);*/
 	return 0;
 }

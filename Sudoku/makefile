@@ -14,13 +14,16 @@ DOXY=$(DOC)/html/index.html
 MAKE=$(CC) $(CFLAGS) -o $@ -c $< -lm -I$(INC)/
 INCLUDES= $(INC)/tools.h $(INC)/structures.h $(INC)/constants.h
 EXEC=$(BIN)/sudoku
+OBJS=$(OBJ)/sudoku.o $(OBJ)/tools.o $(OBJ)/rules.o $(OBJ)/backtrack.o
 
-all: $(DOXY) $(EXEC)
+all: doc $(EXEC)
 
-$(DOXY):
+doc: redo
 	doxygen Doxyfile
 
-$(EXEC): $(OBJ)/sudoku.o $(OBJ)/tools.o $(OBJ)/rules.o
+redo:
+
+$(EXEC): $(OBJS)
 	$(CC) $(LDFLAGS) -o $@ $^
 
 $(OBJ)/sudoku.o: $(SRC)/sudoku.c $(INCLUDES)
@@ -30,6 +33,9 @@ $(OBJ)/tools.o: $(SRC)/tools.c $(INCLUDES)
 	$(MAKE)
 
 $(OBJ)/rules.o: $(SRC)/rules.c $(INCLUDES)
+	$(MAKE)
+
+$(OBJ)/backtrack.o: $(SRC)/backtrack.c $(INCLUDES)
 	$(MAKE)
 
 clean: 

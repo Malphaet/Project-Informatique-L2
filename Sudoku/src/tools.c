@@ -40,6 +40,7 @@ void init_grille(GRILLE g) {
 			}
 }
 
+/** Initialise la pile de case fournie avec les valeurs de la grille */
 void init_pile_case(GRILLE g, PILE_CASE *pile){
 	/* Parcours de la grille */
 	int i, j;
@@ -72,6 +73,10 @@ void remplit_case(CASE *c, int chiffre){
 	c->value=chiffre;
 }
 
+/** Supprime un candidant de la c, l'ajoute sur la pile en cas de succes
+ * Si la grille ne possede plus de solutions suite a l'operation,
+ * la fonction renvoie 0 sinon 1.
+ */
 int supprime_candidat(CASE *c,PILE_CASE *p,int candidat){
 	int i;
 	if (!c->candidats[candidat-1]) return 1; /* Si le nombre n'etait pas candidat, il n'est pas utile de le supprimer */
@@ -89,11 +94,35 @@ int supprime_candidat(CASE *c,PILE_CASE *p,int candidat){
 	return 1;
 }
 
+/** Renvoie une copie du contenu d'une case */
+CASE *copy_case(CASE *c){
+	int i;
+	CASE *c2=malloc(sizeof(CASE));
+	init_case(c2,c->row,c->col);
+	c2->value=c->value;
+	for (i=0;i<DIM;i+=1) c2->candidats[i]=c->candidats[i];
+	return c2;
+}
+
+/** Renvoie la copie carbone d'une grille */
+GRILLE *copy_grid(GRILLE *grille){
+	GRILLE *grille2=malloc(sizeof(GRILLE)); TEST(grille2);
+	init_grille(*grille2);
+	rewrite_grid(grille,grille2);
+	return grille2;
+}
+
+/** Ecris le contenu de la premiere grille dans la seconde grille */
+void rewrite_grid(GRILLE *grille_s,GRILLE *grille_d){
+	int i,j;
+	for (i=0;i<DIM;i+=1) for (j=0;j<DIM;j+=1)
+		(*grille_d)[i][j]=copy_case((*grille_s)[i][j]);
+}
 /* -------------------------------------------------- */
 /* --------------	 	Contraintes	 	 ------------ */
 /* -------------------------------------------------- */
 
-/*
+/**
 Contraine d'unicite:
     Un nombre ne peut etre present 
     qu'une et unique fois dans une 
@@ -116,16 +145,8 @@ int contrainte_unicite(GRILLE g, PILE_CASE *p){
 	return 1;
 }
 
-/** Contrainte d'unicite etendue */
-int contrainte_unicitheo(GRILLE g, PILE_CASE *p){
-	int r=0;
-	while (contrainte_theocycle_region(g,p) || contrainte_theocycle_ligne_colones(g,p))
-		r=1; /* Une modification a ete effectue */
-	return r;
-}
-
 /** Appliquer les contraintes d'unicite a la grille jusqu'a ce que
-   celle ci soit declaree insoluble ou bien simplifiee au maximum. */
+ * celle ci soit declaree insoluble ou bien simplifiee au maximum. */
 int contrainte_unicite_grille(GRILLE g){
 	PILE_CASE Pile;
 	init_pile_case(g, &Pile);
@@ -167,6 +188,9 @@ int contrainte_unicite_case(GRILLE g, PILE_CASE *p, CASE *c){
 /* ==============		 Calculs		 ============ */
 /* ================================================== */
 
+/** Calcule le nombre total de combinaisons possibles pour la grille
+ * (Ce qui est combinatoire, les candidats d'une case influants sur la suivante autre)
+ */
 double total_candidats(GRILLE g){
 	int i,j;
 	double r=1;

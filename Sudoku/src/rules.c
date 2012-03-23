@@ -20,8 +20,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "tools.h"
+#include "structures.h"
 
 /* ===========  Functions  =========== */
+
+/** Contrainte d'unicite etendue */
+int contrainte_unicitheo(GRILLE g, PILE_CASE *p){
+	int r=0;
+	while (contrainte_theocycle_region(g,p) || contrainte_theocycle_ligne_colones(g,p))
+		r=1; /* Une modification a ete effectue */
+	return r;
+}
 
 /** Appliquer les contraintes d'unicite etendue sur les lignes et colones de la grille */
 int contrainte_theocycle_ligne_colones(GRILLE g, PILE_CASE *p){
@@ -29,8 +38,8 @@ int contrainte_theocycle_ligne_colones(GRILLE g, PILE_CASE *p){
 	CASE* table[DIM],*table_2[DIM];
 	for (i=0;i<DIM;i++){
 		for (j=0;j<DIM;j++){
-			table[j]=GR(i,j); /* Ligne de cases */
-			table_2[j]=GR(j,i); /* Colone de cases */
+			table[j]=GR(i,j); /** Ligne de cases */
+			table_2[j]=GR(j,i); /** Colone de cases */
 		}
 		add_p|=theocycle_table(table,p)|theocycle_table(table_2,p); /* On note si la pile a etee changee ou non */
 	}
