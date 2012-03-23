@@ -1,8 +1,8 @@
 /*
- * constants.h
+ * rules.h
  * This file is part of Sudoku Scholar Project
  *
- * Copyright (C) 2012 - Maximilien Rigaut & Charly Celereau
+ * Copyright (C) 2012 - Maximilien Rigaut
  *
  * Sudoku Scholar Project is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,23 +15,3 @@
  * GNU General Public License for more details.
  */
 
-
-
-#ifndef __CONSTANTS__
-#define __CONSTANTS__
-
-/************* Includes *************/
-
-/************** Defines *************/
-
-#define DIM 9
-#define DIM_Region 3
-
-/* A corriger */
-#if DIM<10
-#define GBSIZE (2*DIM+4+3*(DIM/3-2))
-#else
-#define GBSIZE (3*DIM+4+3*(DIM/3-2))
-#endif
-
-#endif

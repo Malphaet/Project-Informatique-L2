@@ -15,18 +15,18 @@
  * GNU General Public License for more details.
  */
 
-/************* Includes *************/
+/* ============  Includes  =========== */
 
 #include <stdio.h>
 #include "structures.h"
 
-/************** Defines *************/
+/* ===========  Defines  =========== */
 
-/*************** Main **************/
+/* ==============  Main  =========== */
 
 int main(void)
 {
-	char path[]="../Data/grille3.txt";
+	char path[]="./data/grille3.txt";
 	
 	GRILLE grille;
 	/*PILE_CASE Pile;*/

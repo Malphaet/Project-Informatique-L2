@@ -16,33 +16,19 @@
  */
 
 
-/************* Includes *************/
+/* ===========  Includes  =========== */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "tools.h"
 
-
-/************** Defines *************/
-/** Utils **/
-#define PL printf("You are in function: %s - line: %d\n", __func__,__LINE__); /* (debug) Afficher des informations sur la ligne */
-#define TEST(p) if ((p)==NULL) {PL; printf("\n	> NULL pointer error\n"); exit(EXIT_FAILURE);} /* Teste si le pointeur est non nul */
-#define FAIL {printf("\nUnexpected Error\n"); PL; exit(EXIT_FAILURE);} /* (debug) Faire echouer le programme */
-
-/** Test **/
-#define PP(p) printf("Pile [%d] :",(p)->nb_cases);affiche_case((p)->cases[p->nb_cases-1]); /* Affiche la derniere valeur de la pile */
-
-/** Shortcuts **/
-#define ADD_PILE(p,c) (p)->cases[(p)->nb_cases++] = (c); /* Ajouter c dans la pile p */
-#define GR(x,y) g[x][y] /* Tres utile pour eviter de dependre de l'implementation de la grille */
-
-/************* Functions ************/
+/* ===========  Functions  =========== */
 
 /* ================================================== */
 /* ==============	 	Initialisation	 ============ */
 /* ================================================== */
 
-/* Initialisation d'une grille en remplissant les cases par 0 */
+/** Initialisation d'une grille en remplissant les cases par 0 */
 void init_grille(GRILLE g) {
 	int i, j;
 	CASE *c; /* Une grille d'addresses me parait plus pertinent */
@@ -55,7 +41,7 @@ void init_grille(GRILLE g) {
 }
 
 void init_pile_case(GRILLE g, PILE_CASE *pile){
-/* Parcours de la grille */
+	/* Parcours de la grille */
 	int i, j;
 	pile->nb_cases=0;
 	for(i = 0; i < DIM; i++) for(j = 0; j < DIM; j++)
@@ -63,7 +49,7 @@ void init_pile_case(GRILLE g, PILE_CASE *pile){
 		if(GR(i,j)->value != 0) pile->cases[pile->nb_cases++] = GR(i,j);
 }
 
-/* Initialisation d'une case, tous les chiffres sont candidats */
+/** Initialisation d'une case, tous les chiffres sont candidats */
 void init_case(CASE *c, int row, int col){
 	int i;
 	for (i=0;i<DIM;i++) c->candidats[i]=1;
@@ -76,7 +62,7 @@ void init_case(CASE *c, int row, int col){
 /* ==============	 	Modifications	 ============ */
 /* ================================================== */
 
-/* Modifications des champs d'une case lorsqu'on y inscrit un chiffre */
+/** Modifications des champs d'une case lorsqu'on y inscrit un chiffre */
 void remplit_case(CASE *c, int chiffre){
 	int j;
 	/* Seul le chiffre est candidat */
@@ -123,14 +109,14 @@ Unicite etendue:
 	necessairement plcace a cet emplacement.
 */
 
-/* Contrainte d'unicite simple */
+/** Contrainte d'unicite simple */
 int contrainte_unicite(GRILLE g, PILE_CASE *p){
 	while (p->nb_cases) if (!contrainte_unicite_case(g,p,p->cases[--p->nb_cases]))
 		return 0; /* Si une seule erreur est produite, tout doit s'arreter */
 	return 1;
 }
 
-/* Contrainte d'unicite etendue */
+/** Contrainte d'unicite etendue */
 int contrainte_unicitheo(GRILLE g, PILE_CASE *p){
 	int r=0;
 	while (contrainte_theocycle_region(g,p) || contrainte_theocycle_ligne_colones(g,p))
@@ -138,7 +124,7 @@ int contrainte_unicitheo(GRILLE g, PILE_CASE *p){
 	return r;
 }
 
-/* Appliquer les contraintes d'unicite a la grille jusqu'a ce que
+/** Appliquer les contraintes d'unicite a la grille jusqu'a ce que
    celle ci soit declaree insoluble ou bien simplifiee au maximum. */
 int contrainte_unicite_grille(GRILLE g){
 	PILE_CASE Pile;
@@ -148,7 +134,7 @@ int contrainte_unicite_grille(GRILLE g){
 	return 0; /* La grille est insoluble */
 }
 
-/* Applique les contraintes de la case, sur sa colonne et sa ligne */
+/** Applique les contraintes de la case, sur sa colonne et sa ligne */
 int contrainte_unicite_ligne_colone_case(GRILLE g, PILE_CASE *p, CASE *c){
 	int i;
 	for (i=0; i<DIM; i++) {
@@ -158,7 +144,7 @@ int contrainte_unicite_ligne_colone_case(GRILLE g, PILE_CASE *p, CASE *c){
 	return 1;
 }
 
-/* Applique les contraintes de la case, sur sa region */
+/** Applique les contraintes de la case, sur sa region */
 int contrainte_unicite_region_case(GRILLE g, PILE_CASE *p, CASE *c){
 	int x,y, i,j;
 	x=(c->row/DIM_Region)*DIM_Region;
@@ -170,59 +156,12 @@ int contrainte_unicite_region_case(GRILLE g, PILE_CASE *p, CASE *c){
 	return 1;
 }
 
-/* Applique toutes les contraintes d'unicite simple associees a la case (ligne + colonne) */
+/** Applique toutes les contraintes d'unicite simple associees a la case (ligne + colonne) */
 int contrainte_unicite_case(GRILLE g, PILE_CASE *p, CASE *c){
 	/* Si une seule erreur est produite, tout doit s'arreter */
 	return contrainte_unicite_ligne_colone_case(g,p,c) && contrainte_unicite_region_case(g,p,c);
 }
 
-/* Appliquer les contraintes d'unicite etendue sur les lignes et colones de la grille */
-int contrainte_theocycle_ligne_colones(GRILLE g, PILE_CASE *p){
-	int i,j,add_p=0;
-	CASE* table[DIM],*table_2[DIM];
-	for (i=0;i<DIM;i++){
-		for (j=0;j<DIM;j++){
-			table[j]=GR(i,j); /* Ligne de cases */
-			table_2[j]=GR(j,i); /* Colone de cases */
-		}
-		add_p|=theocycle_table(table,p)|theocycle_table(table_2,p); /* On note si la pile a etee changee ou non */
-	}
-	return add_p;
-}
-/* Appliquer les contraintes d'unicite etendue sur chaque region de la grille */
-int contrainte_theocycle_region(GRILLE g, PILE_CASE *p){
-	int x,y, i,j,k,l, add_p=0;
-	CASE * table[DIM];
-	
-	for (i=0; i<DIM_Region; i++) for (j=0; j<DIM_Region; j++){ /* Pour chaque region de la grille */
-		for (k=0;k<DIM_Region; k++) for (l=0;l<DIM_Region;l++){ /* On ajoute au tableau les cases de la region */
-			x=i*DIM_Region+k; y=j*DIM_Region+l;
-			table[k+DIM_Region*l]=GR(x,y);
-		}
-		add_p|=theocycle_table(table,p); /* On note si la pile a etee changee */
-	}
-	return add_p;
-}
-
-/* Dans le tableau si un candidat n'as qu'une place ou aller, alors l'unicite nous dit qu'il se doit d'etre a cette place */
-int theocycle_table(CASE * table[DIM],PILE_CASE *p){
-	int i,j,nb,add_p=0;
-	CASE *r;
-	
-	for (i=0;i<DIM;i++){ /* Pour chaque candidat 1...DIM */
-		nb=0;
-		/* Pour chaque case du tableau, si le nombre est candidat, verifier son unicite*/
-		for (j=0;j<DIM;j++) if (table[j]->candidats[i]){
-			if (nb++) break; /* Inutile de continuer, plusieurs places sont possibles */
-			r=table[j]; /* Le nombre est candidat */
-		}
-		if (nb==1 && !r->value) { /* Le candidat est uniquement present dans cette case, l'ajouter */
-			remplit_case(r,i+1);
-			ADD_PILE(p,r); add_p=1; /* Des modifications ont etes effectues, la pile est modifiee */
-		}
-	}
-	return add_p;
-}
 
 /* ================================================== */
 /* ==============		 Calculs		 ============ */
@@ -240,7 +179,7 @@ double total_candidats(GRILLE g){
 /* ==============	 	Affichage		============= */
 /* ================================================== */
 
-/* Affiche une variable de type GRILLE */
+/** Affiche une variable de type GRILLE */
 void affiche_grille(GRILLE grille){
 	int i,j;
 	printf("\n"); for (j=0;j<GBSIZE;j++) printf("-"); printf("\n");
@@ -253,7 +192,7 @@ void affiche_grille(GRILLE grille){
 	printf("\n");
 }
 
-/* Affiche les candidats d'une GRILLE */
+/** Affiche les candidats d'une GRILLE */
 void affiche_grille_candidats(GRILLE grille){
 	int i,j;
 	printf("\n"); for (j=0;j<GBSIZE;j++) printf("-"); printf("\n");
@@ -266,7 +205,7 @@ void affiche_grille_candidats(GRILLE grille){
 	printf("\n");
 }
 
-/* Affiche une variable de type CASE */
+/** Affiche une variable de type CASE */
 void affiche_case(CASE *c){
 	int i;
 	printf("Case (%d,%d): (%d %s) : ",c->row, c->col, c->nb_candidats,c->nb_candidats>1?"candidats":"candidat");
@@ -274,7 +213,7 @@ void affiche_case(CASE *c){
 	printf("[%d]\n",c->value);
 }
 
-/* Affiche une variable de type PILE_CASE */
+/** Affiche une variable de type PILE_CASE */
 void affiche_pile(PILE_CASE *p){
 	int i; 
 	printf("Pile [%d] :\n",p->nb_cases); 
@@ -287,8 +226,8 @@ void affiche_pile(PILE_CASE *p){
 /* ==============	 	Gestion I/O	 	============= */
 /* ================================================== */
 
-/* Saisie d'une grille a partir d'un fichier */
-/* Les "chiffres" peuvent etre > 9 mais doivent etre separes par un (ou plusieurs) espace */
+/** Saisie d'une grille a partir d'un fichier
+ * Les "chiffres" peuvent etre > 9 mais doivent etre separes par un (ou plusieurs) espace(s) */
 void saisie_grille(GRILLE g, char *adr){
 	int i,j,val;
 	FILE *f=fopen(adr,"r");
