@@ -18,6 +18,7 @@
 /* ============  Includes  =========== */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "structures.h"
 
 /* ===========  Defines  =========== */
@@ -28,7 +29,6 @@ int main(void)
 {
 	char path[]="./data/grilleC.txt";
 	int *nb_sols=malloc(sizeof(int));
-	*nb_sols=0;
 	GRILLE grille,gres;
 	
 	/*PILE_CASE Pile;*/
@@ -48,7 +48,6 @@ int main(void)
 	
 	backtracking_resolution(&grille,&gres,nb_sols);
 	
-	printf("%d", *nb_sols);
 	affiche_grille(grille);
 	affiche_grille(gres);
 	
