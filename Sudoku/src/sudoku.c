@@ -18,18 +18,24 @@
 /* ============  Includes  =========== */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "structures.h"
 
 /* ===========  Defines  =========== */
 
 /* ==============  Main  =========== */
 
-int main(void)
-{
-	char path[]="./data/eleven.txt";
+int main(int nbargs,char **kwargs){
+	char *path;
 	GRILLE grille,gres;
 	infos nfo={0,0};
 	
+	if (nbargs<2){
+		printf("Le nombre d'arguments est incorrect\n Usage: Backtrack <grille>\n");
+		exit(EXIT_FAILURE);
+	}
+
+	path=kwargs[1];
 	init_grille(grille);
 	saisie_grille(grille,path);
 
@@ -45,7 +51,8 @@ int main(void)
 	backtracking_resolution(&grille,&gres);
 	
 	affiche_grille(grille);
-	affiche_grille(gres);
+	/*affiche_grille(gres);*/
+	affiche_grille_candidats(grille);
 	/*affiche_grille_candidats(gres);*/
 	if (0) {
 		init_grille(gres); init_grille(grille); saisie_grille(grille,path);

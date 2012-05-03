@@ -16,12 +16,15 @@ INCLUDES= $(INC)/tools.h $(INC)/structures.h $(INC)/constants.h
 EXEC=$(BIN)/sudoku
 OBJS=$(OBJ)/sudoku.o $(OBJ)/tools.o $(OBJ)/rules.o $(OBJ)/backtrack.o
 
-all: doc $(EXEC)
+all: $(EXEC)
 
-doc: redo
+edit:
+	gedit $(SRC)/* $(INC)/* makefile 2> /dev/null&
+
+doc: .PHONY
 	doxygen Doxyfile
 
-redo:
+.PHONY:
 
 $(EXEC): $(OBJS)
 	$(CC) $(LDFLAGS) -o $@ $^
@@ -43,5 +46,6 @@ clean:
 	
 cleaner: clean
 	rm -f $(EXEC)
-	rm -Rf $(DOC)/*
+	rm -Rf $(DOC)/latex/
+	rm -Rf $(DOC)/html/
 

@@ -30,7 +30,7 @@ int backtracking_resolution(GRILLE *g,GRILLE *gres){
 	
 	GRILLE *g2=malloc(sizeof(GRILLE));
 	CASE *C1,*Ctemp=malloc(sizeof(CASE)); TEST(Ctemp);
-	/** La grille est elle resolue */
+	/** La grille est elle resolue ? */
 	if (test_is_empty(g)) {
 		rewrite_grid(g,gres); return 1;
 	}
@@ -50,7 +50,7 @@ int backtracking_resolution(GRILLE *g,GRILLE *gres){
 		
 		/** Application des contraintes d'unicite 
 		L'utilisation des contraintes d'unicite etendues apporte une gain de performances significatif (~60%)*/
-		if (contrainte_unicite_simple(*g2) && check_grid(g2,C1))
+		if (contrainte_unicite_grille(*g2) && check_grid(g2,C1))
 			if (backtracking_resolution(g2,gres)) return 1;
 		if (tf-1>pos) pos=tf-1;
 		supprime_grille(*g2); 
@@ -64,12 +64,15 @@ int backtracking_infos(GRILLE *g,GRILLE *gres,infos *nfo){
 	GRILLE *g2=malloc(sizeof(GRILLE));
 	CASE *C1,*Ctemp=malloc(sizeof(CASE)); TEST(Ctemp);
 	if (test_is_empty(g)) {
-		rewrite_grid(g,gres); return 1;
+		rewrite_grid(g,gres);
+		affiche_grille(*gres);
+		nfo->nb_sols++;
+		return 1;
 	}
 	
 	for (pos=0;pos<DIM;pos+=1){
 		g2=copy_grid(g);
-		C1=smaller_case(g2);
+		C1=first_empty_case(g2);
 		if (C1==NULL) return 0;
 		
 		tf=first_candidate(C1,pos);
@@ -77,11 +80,10 @@ int backtracking_infos(GRILLE *g,GRILLE *gres,infos *nfo){
 		if (tf==DIM+1) return 0;
 		remplit_case(C1,tf);
 		if (!nfo->nb_sols) nfo->depth++;
-		if (contrainte_unicite_simple(*g2) && check_grid(g2,C1))
-			if (backtracking_infos(g2,gres,nfo)) {
-				affiche_grille(*gres);
-				nfo->nb_sols++;
-			}
+		if (contrainte_unicite_simple(*g2) /*&& check_grid(g2,C1)*/){
+			if (backtracking_infos(g2,gres,nfo))
+				NULL;
+		}
 		if (tf-1>pos) pos=tf-1;
 		supprime_grille(*g2); 
 	}
