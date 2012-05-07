@@ -24,6 +24,22 @@
 
 /* ===========  Functions  =========== */
 
+/**
+Contraine d'unicite:
+    Un nombre ne peut etre present 
+    qu'une et unique fois dans une 
+    ligne colone et region
+Unicite simple:
+	On supprime les cases remplies des 
+	candidats des cases des lignes,
+	colones et regions concernes.
+Unicite etendue:
+	Si un nombre n'est candidat qu'a une 
+	seule et unique place dans une ligne, 
+	colone ou region, alors celui ci doit 
+	necessairement plcace a cet emplacement.
+*/
+
 /** Contrainte d'unicite etendue */
 int contrainte_unicitheo(GRILLE g, PILE_CASE *p){
 	int r=0;

@@ -51,9 +51,10 @@ int main(int nbargs,char **kwargs){
 	backtracking_resolution(&grille,&gres);
 	
 	affiche_grille(grille);
-	/*affiche_grille(gres);*/
 	affiche_grille_candidats(grille);
-	/*affiche_grille_candidats(gres);*/
+	
+	printf("Solution (Par Backtracking)\n");
+	affiche_grille(gres);
 	if (0) {
 		init_grille(gres); init_grille(grille); saisie_grille(grille,path);
 		printf("Infos complementaires :\n");

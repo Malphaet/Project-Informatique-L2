@@ -36,16 +36,15 @@ int backtracking_resolution(GRILLE *g,GRILLE *gres){
 	}
 	
 	/** On essaye tous les candidats eventuels pour la case */
-
 	for (pos=0;pos<DIM;pos+=1){
-		/** Copier la grille */
-		g2=copy_grid(g);
+		g2=copy_grid(g); /** Copier la grille */
+		
 		C1=first_empty_case(g2);
 		if (C1==NULL) return 0;
 		
 		tf=first_candidate(C1,pos);
-
 		if (tf==DIM+1) return 0;
+		
 		remplit_case(C1,tf);
 		
 		/** Application des contraintes d'unicite 
@@ -80,10 +79,7 @@ int backtracking_infos(GRILLE *g,GRILLE *gres,infos *nfo){
 		if (tf==DIM+1) return 0;
 		remplit_case(C1,tf);
 		if (!nfo->nb_sols) nfo->depth++;
-		if (contrainte_unicite_simple(*g2) /*&& check_grid(g2,C1)*/){
-			if (backtracking_infos(g2,gres,nfo))
-				NULL;
-		}
+		if (contrainte_unicite_simple(*g2)) backtracking_infos(g2,gres,nfo);
 		if (tf-1>pos) pos=tf-1;
 		supprime_grille(*g2); 
 	}
