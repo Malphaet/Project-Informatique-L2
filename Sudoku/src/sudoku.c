@@ -52,15 +52,14 @@ int main(int nbargs,char **kwargs){
 	contrainte_unicite_grille(grille);
 	printf("%f\n",total_candidats(grille));
 	
-	init_grille(gres);
+	/*init_grille(gres);
 	
 	backtracking_resolution(&grille,&gres);
-	
+	*/
 	affiche_grille(grille);
-	/*affiche_grille_candidats(grille);*/
 	
-	printf("Solution (Par Backtracking)\n");
-	affiche_grille(gres);
+	/*printf("Solution (Par Backtracking)\n");
+	affiche_grille(gres);*/
 	if (0) {
 		init_grille(gres); init_grille(grille); saisie_grille(grille,path);
 		printf("Infos complementaires :\n");
@@ -70,10 +69,9 @@ int main(int nbargs,char **kwargs){
 	}
 	
 	current=historique.suivant;
-	printf("Verbosity : ");
+	printf("Verbosity (0: None / 1: All) :");
 	scanf("%d",&v);
 	while (current!=NULL){
-		
 		print_element(current,v);
 		current=current->precedent;
 	}

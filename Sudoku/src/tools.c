@@ -104,7 +104,7 @@ int supprime_candidat(CASE *c,PILE_CASE *p,int candidat){
 	if (c->nb_candidats==1)
 		for(i=0;i<DIM;i++) if (c->candidats[i]) {
 			c->value=i+1;
-			case_added(c->row,c->col,c->value,1,unicite);
+			case_added(c->row,c->col,c->value,1,curr_regle);
 			ADD_PILE(p,c); /* L'ajouter a la pile */
 			return 1;
 		}
@@ -180,6 +180,7 @@ int contrainte_unicite_simple(GRILLE grille){
 /** Applique les contraintes de la case, sur sa colonne et sa ligne */
 int contrainte_unicite_ligne_colone_case(GRILLE g, PILE_CASE *p, CASE *c){
 	int i;
+	curr_regle=unicite;
 	for (i=0; i<DIM; i++) {
 		if (i!=c->row){
 			if (!supprime_candidat(GR(i,c->col),p,c->value)) return 0; /* La grille ne contient aucune solution */
@@ -187,7 +188,7 @@ int contrainte_unicite_ligne_colone_case(GRILLE g, PILE_CASE *p, CASE *c){
 		}
 		if (i!=c->col) {
 			if (!supprime_candidat(GR(c->row,i),p,c->value)) return 0; /* /!\ Arret immediat */
-			else param_added(GR(c->row,i)->row,GR(c->row,i)->col,c->value,0,unicite);
+			param_added(GR(c->row,i)->row,GR(c->row,i)->col,c->value,0,unicite);
 		}
 	}
 	return 1;
@@ -202,6 +203,7 @@ int contrainte_unicite_region_case(GRILLE g, PILE_CASE *p, CASE *c){
 	for (i=0; i<DIM_Region; i++) for (j=0; j<DIM_Region; j++)
 		if ((x+i) != c->row || (y+j) != c->col){ /* Inutile d'essayer de se supprimer */
 			param_added(GR(x+i,y+i)->row,GR(x+i,y+i)->col,c->value,0,unicite);
+			curr_regle=unicite;
 			if (!supprime_candidat(GR(x+i,y+j),p,c->value)) return 0;
 		}
 	return 1;
