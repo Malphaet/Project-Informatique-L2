@@ -1,0 +1,15 @@
+#!/bin/bash
+
+function exist()
+{
+	if [ -d $1 ]
+	then echo "Check $1 directory ... done"
+	else
+		echo "Creating $1 directory"
+		mkdir "bin"
+	fi
+}
+
+
+exist 'bin/'
+exist 'obj/'

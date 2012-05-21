@@ -224,7 +224,7 @@ void affiche_grille(GRILLE grille){
 	printf("\n"); for (j=0;j<GBSIZE;j++) printf("-"); printf("\n");
 	for (i=0;i<DIM;i++){ 
 		printf("| ");
-		for (j=0;j<DIM; j++){ printf("%d ",grille[i][j]->value); if ((j+1)%3==0) printf("| "); }
+		for (j=0;j<DIM; j++){ printf("%d ",grille[i][j]->value); if ((j+1)%DIM_Region==0) printf("| "); }
 		if ((i+1)%DIM_Region==0) { printf("\n"); for (j=0;j<GBSIZE;j++) printf("-"); }
 		printf("\n");
 	}
@@ -237,7 +237,7 @@ void affiche_grille_candidats(GRILLE grille){
 	printf("\n"); for (j=0;j<GBSIZE;j++) printf("-"); printf("\n");
 	for (i=0;i<DIM;i++){ 
 		printf("| ");
-		for (j=0;j<DIM; j++){ printf("%d ",grille[i][j]->nb_candidats); if ((j+1)%3==0) printf("| "); }
+		for (j=0;j<DIM; j++){ printf("%d ",grille[i][j]->nb_candidats); if ((j+1)%DIM_Region==0) printf("| "); }
 		if ((i+1)%DIM_Region==0) { printf("\n"); for (j=0;j<GBSIZE;j++) printf("-"); }
 		printf("\n");
 	}
