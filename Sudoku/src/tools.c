@@ -40,6 +40,12 @@ void init_grille(GRILLE g) {
 			}
 }
 
+/** Initialisation de l'historique, pour une transparance et une gestion en effet de bord */
+void init_historique(HISTORIQUE h){
+	h->precedent=NULL;
+	h->suivant=NULL;
+}
+
 /** Initialise la pile de case fournie avec les valeurs de la grille */
 void init_pile_case(GRILLE g, PILE_CASE *pile){
 	/* Parcours de la grille */
@@ -98,6 +104,7 @@ int supprime_candidat(CASE *c,PILE_CASE *p,int candidat){
 	if (c->nb_candidats==1)
 		for(i=0;i<DIM;i++) if (c->candidats[i]) {
 			c->value=i+1;
+			case_added(c->row,c->col,c->value,1,unicite);
 			ADD_PILE(p,c); /* L'ajouter a la pile */
 			return 1;
 		}
@@ -174,8 +181,14 @@ int contrainte_unicite_simple(GRILLE grille){
 int contrainte_unicite_ligne_colone_case(GRILLE g, PILE_CASE *p, CASE *c){
 	int i;
 	for (i=0; i<DIM; i++) {
-		if (i!=c->row) if (!supprime_candidat(GR(i,c->col),p,c->value)) return 0; /* La grille ne contient aucune solution */
-		if (i!=c->col) if (!supprime_candidat(GR(c->row,i),p,c->value)) return 0; /* /!\ Arret immediat */
+		if (i!=c->row){
+			if (!supprime_candidat(GR(i,c->col),p,c->value)) return 0; /* La grille ne contient aucune solution */
+			else param_added(GR(i,c->col)->row,GR(i,c->col)->col,c->value,0,unicite);
+		}
+		if (i!=c->col) {
+			if (!supprime_candidat(GR(c->row,i),p,c->value)) return 0; /* /!\ Arret immediat */
+			else param_added(GR(c->row,i)->row,GR(c->row,i)->col,c->value,0,unicite);
+		}
 	}
 	return 1;
 }
@@ -187,8 +200,10 @@ int contrainte_unicite_region_case(GRILLE g, PILE_CASE *p, CASE *c){
 	y=(c->col/DIM_Region)*DIM_Region;
 
 	for (i=0; i<DIM_Region; i++) for (j=0; j<DIM_Region; j++)
-		if ((x+i) != c->row || (y+j) != c->col) /* Inutile d'essayer de se supprimer */
+		if ((x+i) != c->row || (y+j) != c->col){ /* Inutile d'essayer de se supprimer */
+			param_added(GR(x+i,y+i)->row,GR(x+i,y+i)->col,c->value,0,unicite);
 			if (!supprime_candidat(GR(x+i,y+j),p,c->value)) return 0;
+		}
 	return 1;
 }
 
@@ -260,6 +275,58 @@ void affiche_pile(PILE_CASE *p){
 		printf("    > "); affiche_case((p)->cases[i]);
 	}
 	
+}
+
+/** Ajouter un element a l'historique */
+void case_added(int ligne,int colone, int value,int status,int r){
+	HISTORIQUE h2=malloc(sizeof(ELEMENT)),temp;
+	temp=historique.suivant;
+	historique.suivant=h2;
+	h2->precedent=temp;
+	h2->suivant=NULL;
+	h2->ligne=ligne;
+	h2->status=status;
+	h2->colone=colone;
+	h2->regle=r;
+	h2->value=value;
+	h2->parametres=parametres.suivant;
+	if (parametres.suivant) parametres.suivant=NULL;
+	init_historique(&parametres);
+}
+
+void param_added(int ligne,int colone, int value,int status,int r){
+	HISTORIQUE h2=malloc(sizeof(ELEMENT)),temp;
+	temp=parametres.suivant;
+	parametres.suivant=h2;
+	h2->precedent=temp;
+	h2->suivant=NULL;
+	h2->ligne=ligne;
+	h2->status=status;
+	h2->colone=colone;
+	h2->regle=r;
+	h2->value=value;
+}
+
+void print_element(HISTORIQUE h, int verbose){
+	int i=0;
+	if (verbose>1 || h->regle!=1) {
+		printf("Candidat (%d,%d) - ",h->ligne,h->colone);
+		printf("Action (%s)  : %d",h->regle!=1?"Selection":"Suppresion",h->value);
+	
+		if (verbose>0) {
+			printf("\nRegle utilisee : ");
+			if (h->regle==pre_remplie) printf("Remplie a l'origine");
+			if (h->regle==candidat_unique) printf("Candidat unique");
+			if (h->regle==unicite) printf("Unicite");
+			printf("\n");
+			while (h->parametres!=NULL) {
+				printf("Case (%d,%d) ",h->parametres->ligne,h->parametres->colone);
+				h->parametres=h->parametres->precedent;
+			}
+		}
+	
+		printf("\n");
+	}
 }
 /* ================================================== */
 /* ==============	 	Gestion I/O	 	============= */

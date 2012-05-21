@@ -57,7 +57,7 @@ int contrainte_theocycle_ligne_colones(GRILLE g, PILE_CASE *p){
 			table[j]=GR(i,j); /** Ligne de cases */
 			table_2[j]=GR(j,i); /** Colone de cases */
 		}
-		add_p|=theocycle_table(table,p)|theocycle_table(table_2,p); /* On note si la pile a etee changee ou non */
+		add_p|=theocycle_table(table,p)|theocycle_table(table_2,p); /* On note si la pile a ete changee ou non */
 	}
 	return add_p;
 }
@@ -90,6 +90,7 @@ int theocycle_table(CASE * table[DIM],PILE_CASE *p){
 		}
 		if (nb==1 && !r->value) { /* Le candidat est uniquement present dans cette case, l'ajouter */
 			remplit_case(r,i+1);
+			case_added(r->row,r->col,r->value,1,candidat_unique);
 			ADD_PILE(p,r); add_p=1; /* Des modifications ont etes effectues, la pile est modifiee */
 		}
 	}

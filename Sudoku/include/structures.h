@@ -51,6 +51,28 @@ typedef struct INFOS
 /* Grille de Sudoku */
 typedef CASE* GRILLE[DIM][DIM];
 
+
+enum regles{
+	pre_remplie,
+	unicite,
+	candidat_unique
+};
+
+/** Explications des regles */
+typedef struct element{
+	int ligne; /* Ligne de la case concernee */
+	int colone; /* Colone de la case concernee */
+	int status; /* 0 suppretion, 1 choix */
+	int value; /* Valeur supprimee, ou selectionnee */
+	enum regles regle; /* Regle utilisee */
+	struct element *suivant; /* Element suivant */
+	struct element *precedent; /* Element suivant */
+	struct element *parametres; /* Autres cases concernes */
+} ELEMENT, *HISTORIQUE;
+ELEMENT historique;
+ELEMENT parametres;
+int curr_regle;
+
 /* ============ Prototype  =========== */
 
 /* = Fonctions d'initialisation = */
@@ -58,6 +80,7 @@ void init_case(CASE *, int, int);									/* Tested */
 void init_pile_case(GRILLE, PILE_CASE *);							/* Tested */
 void init_grille(GRILLE);											/* Tested */
 void supprime_grille(GRILLE);
+void init_historique(HISTORIQUE);
 
 /* = Fonctions de saisie = */
 void saisie_grille(GRILLE, char *);									/* Tested */
@@ -105,4 +128,8 @@ void affiche_grille_candidats(GRILLE);								/* Tested */
 void test_norm(GRILLE);												/* Tested */
 int test_case(CASE *);												/* Tested */
 
+
+void case_added(int,int, int,int,int);
+void param_added(int,int, int,int,int);
+void print_element(HISTORIQUE,int);
 #endif
