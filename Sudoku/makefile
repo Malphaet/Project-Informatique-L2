@@ -19,7 +19,7 @@ OBJS=$(OBJ)/sudoku.o $(OBJ)/tools.o $(OBJ)/rules.o $(OBJ)/backtrack.o
 all: $(EXEC)
 
 edit:
-	gedit $(SRC)/* $(INC)/* makefile 2> /dev/null&
+	gedit $(SRC)/* $(INC)/* makefile configure 2> /dev/null&
 
 doc: .PHONY
 	doxygen Doxyfile

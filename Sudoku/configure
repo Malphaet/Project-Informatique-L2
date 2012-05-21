@@ -6,7 +6,7 @@ function exist()
 	then echo "Check $1 directory ... done"
 	else
 		echo "Creating $1 directory"
-		mkdir "bin"
+		mkdir "$1"
 	fi
 }
 
