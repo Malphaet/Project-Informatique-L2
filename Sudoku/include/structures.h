@@ -34,24 +34,17 @@ typedef struct CASE
 	int col;
 } CASE;
 
-/* Pile de cases */
+/** Pile de cases */
 typedef struct
 {
 	CASE* cases[DIM*DIM]; /* Au plus, on aura DIM*DIM cases dans la pile */
 	int nb_cases; /* Nombre d'elements dans de la pile */
 } PILE_CASE;
 
-typedef struct INFOS
-{
-	int nb_sols;
-	int depth;
-} infos;
-
-
 /** Grille de Sudoku */
 typedef CASE* GRILLE[DIM][DIM];
 
-
+/** Les types de regles que l'on peut avoir dans l'historique */
 enum regles{
 	pre_remplie,
 	unicite,
@@ -66,7 +59,6 @@ typedef struct element{
 	int value; /* Valeur supprimee, ou selectionnee */
 	enum regles regle; /* Regle utilisee */
 	struct element *suivant; /* Element suivant */
-	struct element *precedent; /* Element suivant */
 	struct element *parametres; /* Autres cases concernes */
 } ELEMENT, *HISTORIQUE;
 ELEMENT historique;
