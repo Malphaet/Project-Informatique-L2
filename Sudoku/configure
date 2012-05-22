@@ -1,15 +1,27 @@
 #!/bin/bash
 
-function exist()
-{
+function exist() {
 	if [ -d $1 ]
-	then echo "Check $1 directory ... done"
+		then echo "Checking if $1 directory ... done"
 	else
-		echo "Creating $1 directory"
+		echo "Creating $1 directory ... done"
 		mkdir "$1"
 	fi
 }
 
+function should() {
+	if [ -e $1 ]
+		then echo "Checking if $1 exist ... done"
+	else
+		echo "Checking if $1 exist ... missing"
+		exit
+	fi
+}
 
 exist 'bin/'
 exist 'obj/'
+exist 'doc/'
+should 'makefile'
+#should 'src/sudoku.c'
+
+echo "Tests passed: Everything is ready for build"

@@ -28,7 +28,10 @@
 int main(int nbargs,char **kwargs){
 	char *path;
 	GRILLE grille,gres;
+	HISTORIQUE current;
 	infos nfo={0,0};
+	int v;
+	/*ELEMENT historique;*/
 	
 	if (nbargs<2){
 		printf("Le nombre d'arguments est incorrect\n Usage: Backtrack <grille>\n");
@@ -37,6 +40,8 @@ int main(int nbargs,char **kwargs){
 
 	path=kwargs[1];
 	init_grille(grille);
+	init_historique(&historique);
+	init_historique(&parametres);
 	saisie_grille(grille,path);
 
 	affiche_grille(grille);
@@ -46,15 +51,14 @@ int main(int nbargs,char **kwargs){
 	contrainte_unicite_grille(grille);
 	printf("%f\n",total_candidats(grille));
 	
-	init_grille(gres);
+	/*init_grille(gres);
 	
 	backtracking_resolution(&grille,&gres);
-	
+	*/
 	affiche_grille(grille);
-	affiche_grille_candidats(grille);
 	
-	printf("Solution (Par Backtracking)\n");
-	affiche_grille(gres);
+	/*printf("Solution (Par Backtracking)\n");
+	affiche_grille(gres);*/
 	if (0) {
 		init_grille(gres); init_grille(grille); saisie_grille(grille,path);
 		printf("Infos complementaires :\n");
@@ -63,5 +67,12 @@ int main(int nbargs,char **kwargs){
 		printf("Nb nodes explorees : %d\n",nfo.depth);
 	}
 	
+	current=historique.suivant;
+	printf("Verbosity (0: None / 1: All) :");
+	scanf("%d",&v);
+	while (current!=NULL){
+		print_element(current,v);
+		current=current->precedent;
+	}
 	return 0;
 }
