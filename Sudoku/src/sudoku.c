@@ -51,9 +51,6 @@ int main(int nbargs,char **kwargs){
 	contrainte_unicite_grille(grille);
 	/*printf("%f\n",total_candidats(grille));*/
 	
-	init_grille(gres);
-	
-	backtracking_resolution(&grille,&gres);
 	affiche_grille(grille);
 	
 	current=historique.suivant;
@@ -62,6 +59,17 @@ int main(int nbargs,char **kwargs){
 	while (current!=NULL){
 		print_element(current,v);
 		current=current->suivant;
+	}
+	
+	if (!test_is_empty(&grille)){
+		printf("Executer un backtracking sur la grille ? (0:Non / 1:Oui) : ");
+		scanf("%d",&v);
+		if (v){
+			init_grille(gres);
+			backtracking_resolution(&grille,&gres);
+			printf("Solution (Par backtracking)\n");
+			affiche_grille(gres);
+		}
 	}
 	return 0;
 }

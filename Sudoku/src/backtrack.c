@@ -57,7 +57,7 @@ int backtracking_resolution(GRILLE *g,GRILLE *gres){
 	return 0;
 }
 
-int backtracking_infos(GRILLE *g,GRILLE *gres,infos *nfo){
+/*int backtracking_infos(GRILLE *g,GRILLE *gres,infos *nfo){
 	int pos,tf;
 	
 	GRILLE *g2=malloc(sizeof(GRILLE));
@@ -84,7 +84,7 @@ int backtracking_infos(GRILLE *g,GRILLE *gres,infos *nfo){
 		supprime_grille(*g2); 
 	}
 	return 0;
-}
+}*/
 
 /** Teste si la grille est une feuille
  * Cad si elle est valable (et eventuellement finie)

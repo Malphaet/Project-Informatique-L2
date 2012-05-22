@@ -105,7 +105,7 @@ int first_candidate(CASE *, int);
 CASE *first_empty_case(GRILLE *);
 CASE *smaller_case(GRILLE *);
 int check_grid(GRILLE *g2,CASE *C1);
-int backtracking_infos(GRILLE *,GRILLE *,infos *);
+/*int backtracking_infos(GRILLE *,GRILLE *,infos *);*/
 
 /* Tools */
 double total_candidats(GRILLE);										/* Seems Working */
