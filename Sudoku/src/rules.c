@@ -90,6 +90,8 @@ int theocycle_table(CASE * table[DIM],PILE_CASE *p){
 		}
 		if (nb==1 && !r->value) { /* Le candidat est uniquement present dans cette case, l'ajouter */
 			remplit_case(r,i+1);
+			curr_regle=candidat_unique;
+			case_added(r->row,r->col,r->value,1,candidat_unique);
 			ADD_PILE(p,r); add_p=1; /* Des modifications ont etes effectues, la pile est modifiee */
 		}
 	}

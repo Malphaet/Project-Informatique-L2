@@ -29,9 +29,9 @@ int main(int nbargs,char **kwargs){
 	char *path;
 	GRILLE grille,gres;
 	HISTORIQUE current;
-	/*infos nfo={0,0};*/
+	
 	int v;
-	/*ELEMENT historique;*/
+	
 	
 	if (nbargs<2){
 		printf("Le nombre d'arguments est incorrect\n Usage: sudoku <grille>\n");
@@ -55,26 +55,13 @@ int main(int nbargs,char **kwargs){
 	
 	backtracking_resolution(&grille,&gres);
 	affiche_grille(grille);
-	/*affiche_grille_candidats(grille);*/
-	
-	
-	printf("Solution (Par Backtracking)\n");
-	affiche_grille(gres);
-	/*
-	if (0) {
-		init_grille(gres); init_grille(grille); saisie_grille(grille,path);
-		printf("Infos complementaires :\n");
-		backtracking_infos(&grille,&gres,&nfo);
-		printf("Nb solutions : %d\n",nfo.nb_sols);
-		printf("Nb nodes explorees : %d\n",nfo.depth);
-	}*/
 	
 	current=historique.suivant;
 	printf("Verbosity (0: None / 1: All) :");
 	scanf("%d",&v);
 	while (current!=NULL){
 		print_element(current,v);
-		current=current->precedent;
+		current=current->suivant;
 	}
 	return 0;
 }

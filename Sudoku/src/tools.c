@@ -42,7 +42,6 @@ void init_grille(GRILLE g) {
 
 /** Initialisation de l'historique, pour une transparance et une gestion en effet de bord */
 void init_historique(HISTORIQUE h){
-	h->precedent=NULL;
 	h->suivant=NULL;
 }
 
@@ -280,29 +279,31 @@ void affiche_pile(PILE_CASE *p){
 	
 }
 
-/** Ajouter un element a l'historique */
+/** Une case a etee ajoutee, on en prend note dans l'historique */
 void case_added(int ligne,int colone, int value,int status,int r){
-	HISTORIQUE h2=malloc(sizeof(ELEMENT)),temp;
+	HISTORIQUE h2=malloc(sizeof(ELEMENT)),temp; TEST(h2);
 	temp=historique.suivant;
 	historique.suivant=h2;
-	h2->precedent=temp;
-	h2->suivant=NULL;
+	
+	h2->suivant=temp;
 	h2->ligne=ligne;
 	h2->status=status;
 	h2->colone=colone;
 	h2->regle=r;
 	h2->value=value;
+	
 	h2->parametres=parametres.suivant;
 	if (parametres.suivant) parametres.suivant=NULL;
-	init_historique(&parametres);
+	
 }
 
+/** Une modification a etee effectuee, aucune case n'est ajoutee mais on garde trace de l'action */
 void param_added(int ligne,int colone, int value,int status,int r){
 	HISTORIQUE h2=malloc(sizeof(ELEMENT)),temp;
 	temp=parametres.suivant;
 	parametres.suivant=h2;
-	h2->precedent=temp;
-	h2->suivant=NULL;
+
+	h2->suivant=temp;
 	h2->ligne=ligne;
 	h2->status=status;
 	h2->colone=colone;
@@ -310,10 +311,11 @@ void param_added(int ligne,int colone, int value,int status,int r){
 	h2->value=value;
 }
 
+/** Afficher un element d'historique */
 void print_element(HISTORIQUE h, int verbose){
-	if (verbose>1 || h->regle!=1) {
+	if (verbose>1 || h->regle!=pre_remplie) {
 		printf("Candidat (%d,%d) - ",h->ligne,h->colone);
-		printf("Action (%s)  : %d",h->regle!=1?"Selection":"Suppresion",h->value);
+		printf("Action (%s)  : %d",h->regle?"Selection":"Suppresion",h->value);
 	
 		if (verbose>0) {
 			printf("\nRegle utilisee : ");
@@ -323,7 +325,7 @@ void print_element(HISTORIQUE h, int verbose){
 			printf("\n");
 			while (h->parametres!=NULL) {
 				printf("Case (%d,%d) ",h->parametres->ligne,h->parametres->colone);
-				h->parametres=h->parametres->precedent;
+				h->parametres=h->parametres->suivant;
 			}
 		}
 	
